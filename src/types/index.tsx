@@ -1,14 +1,14 @@
 export type UserType = 'admin' | 'teacher' | 'attendance-officer' | 'parent' | 'school-bus';
 
 export interface User {
-  id: string;
-  name: string;
+  uid: string;
   email: string;
+  displayName?: string;
   type: UserType;
-  avatar: string;
+  photoURL?: string;
 }
 
-export interface AuthState {
+export interface AuthContextType {
   user: User | null;
   setUser: (user: User | null) => void;
   logout: () => void;

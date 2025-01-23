@@ -1,11 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Home, ChevronDown } from 'lucide-react';
-import { useAuthStore } from '../store/auth';
-
+import { useAuth } from '../store/auth';
 export const Header: React.FC = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const { user, logout } = useAuth();
   const [showDropdown, setShowDropdown] = React.useState(false);
 
   const handleLogout = () => {

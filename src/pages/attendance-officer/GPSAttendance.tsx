@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Check, Filter } from 'lucide-react';
-import { useAuthStore } from '../../store/auth';
+import { useAuth } from '../../store/auth';
 
 interface Student {
   id: string;
@@ -34,7 +34,7 @@ export const GPSAttendance: React.FC = () => {
   const [students, setStudents] = useState<Student[]>(DUMMY_STUDENTS);
   const [dropFilter, setDropFilter] = useState<'bus' | 'parent' | 'self' | null>(null);
   const [selectAll, setSelectAll] = useState(false);
-  const { user } = useAuthStore();
+  const { user } = useAuth();
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
