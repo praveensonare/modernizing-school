@@ -1,4 +1,5 @@
 
+
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 
 export type UserType = 'admin' | 'teacher' | 'attendance-officer' | 'parent' | 'school-bus';
@@ -22,7 +23,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
 
- 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
