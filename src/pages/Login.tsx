@@ -33,7 +33,8 @@ export const Login: React.FC = () => {
     }
   
     const actionCodeSettings = {
-      url: `https://school.tap2share.co/signin-confirm?type=${type}`,
+      // url: `https://school.tap2share.co/signin-confirm?type=${type}`,
+      url: `https://school.tap2share.co/login/${type}`,
       handleCodeInApp: true,
     };
   
