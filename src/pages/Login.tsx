@@ -23,6 +23,15 @@ export const Login: React.FC = () => {
   const { setUser } = useAuth();
 
   useEffect(() => {
+
+
+    console.log(localStorage.getItem("emailForSignIn"));
+console.log(localStorage.getItem("login type"));
+console.log(window.location.href);
+
+
+
+    
     const emailForSignIn = localStorage.getItem('emailForSignIn');
     if (emailForSignIn && isSignInWithEmailLink(auth, window.location.href)) {
       signInWithEmailLink(auth, emailForSignIn, window.location.href)
@@ -175,7 +184,7 @@ export const Login: React.FC = () => {
 
 
 
-// // main code 
+
 // import React, { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import { Users, School, Bus, UserCheck, User, Mail, LogIn } from 'lucide-react';
