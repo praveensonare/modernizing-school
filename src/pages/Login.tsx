@@ -185,7 +185,7 @@ export const Login: React.FC = () => {
 // };
 
 // export const Login: React.FC = () => {
-//   const [selectedType, setSelectedType] = useState<'parent' | 'admin' | 'teacher' | 'attendance-officer' | 'school-bus'>('parent');
+//   const [selectedType, setSelectedType] = useState<'parent' | 'admingit ' | 'teacher' | 'attendance-officer' | 'school-bus'>('parent');
 //   const [email, setEmail] = useState('');
 //   const [loading, setLoading] = useState<boolean>(false);
 //   const [emailSent, setEmailSent] = useState<boolean>(false);
