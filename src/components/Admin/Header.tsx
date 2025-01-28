@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Home, ChevronDown } from 'lucide-react';
-import { useAuth } from '../store/auth';
+import { useAuth } from '../../store/auth';
 export const Header: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -47,11 +47,11 @@ export const Header: React.FC = () => {
           onClick={() => setShowDropdown(!showDropdown)}
           className="flex items-center space-x-2"
         >
-          <img
+          {/* <img
             src={user?.avatar || 'https://via.placeholder.com/40'}
             alt="User"
             className="w-10 h-10 rounded-full"
-          />
+          /> */}
           <ChevronDown size={20} />
         </button>
         
