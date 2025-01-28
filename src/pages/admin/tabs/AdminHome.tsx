@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { MapPin, Users, UserCheck } from 'lucide-react';
 
