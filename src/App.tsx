@@ -4,7 +4,7 @@ import { Login } from './pages/Login';
 import { Header } from './components/Admin/Header';
 import { Footer } from './components/Admin/Footer';
 
-// Parent Pages
+// Parent Pages Rohit
 import Layout from './components/Parent/Layout';
 import Dashboard from './pages/parents/Dashboard';
 import Profile from './pages/parents/Profile';
