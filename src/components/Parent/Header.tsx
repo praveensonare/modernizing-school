@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Home, ChevronDown, LogOut, User, Bus, History, MessageSquare, UserPlus } from 'lucide-react';
+import { Home, ChevronDown, LogOut, User, Bus, History, Inbox, UserPlus } from 'lucide-react';
 
 interface Child {
   id: string;
@@ -76,8 +76,8 @@ export default function Header() {
             <Link to="/parent/history" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
               <History size={16} className="mr-2" /> History
             </Link>
-            <Link to="/parent/request" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-              <MessageSquare size={16} className="mr-2" /> Request
+            <Link to="/parent/inbox" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+              <Inbox size={16} className="mr-2" /> Inbox
             </Link>
             <Link to="/parent/link-child" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
               <UserPlus size={16} className="mr-2" /> Link Child

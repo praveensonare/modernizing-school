@@ -10,8 +10,9 @@ import Dashboard from './pages/parents/Dashboard';
 import Profile from './pages/parents/Profile';
 import Transport from './pages/parents/Transport';
 import History from './pages/parents/History';
-import Request from './pages/parents/Request';
+import Inbox from './pages/parents/Inbox';
 import LinkChild from './pages/parents/LinkChild';
+import ChildProfile from './pages/parents/ChildProfile.tsx';
 
 // Attendance Officer Pages
 import { AttendanceOfficerDashboard } from './pages/attendance-officer/AttendanceOfficerDashboard';
@@ -65,8 +66,9 @@ function App() {
             <Route path="profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="transport" element={<ProtectedRoute><Transport /></ProtectedRoute>} />
             <Route path="history" element={<ProtectedRoute><History /></ProtectedRoute>} />
-            <Route path="request" element={<ProtectedRoute><Request /></ProtectedRoute>} />
+            <Route path="inbox" element={<ProtectedRoute><Inbox /></ProtectedRoute>} />
             <Route path="link-child" element={<ProtectedRoute><LinkChild /></ProtectedRoute>} />
+            <Route path="child/:id" element={<ChildProfile />} />
           </Route> 
            
           {/* Attendance Officer Routes */}
