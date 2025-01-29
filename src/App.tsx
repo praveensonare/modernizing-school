@@ -34,10 +34,13 @@ import { useAuth } from './store/auth';
 import { AuthProvider } from './store/auth';
 import { useLocation } from 'react-router-dom';
 
+
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
+  const { isauthenticated,user} = useAuth(); 
   const location = useLocation();
-  if (user === null) {
+  console.log("aap testing", isauthenticated);
+
+  if (!isauthenticated) { 
     return <Navigate to="/login" replace />;
   }
 
@@ -51,6 +54,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
     </div>
   );
 };
+
+
 
 function App() {
   return (
