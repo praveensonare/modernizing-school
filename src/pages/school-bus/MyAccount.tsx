@@ -1,121 +1,141 @@
 import React from 'react';
-import { User, Phone, MapPin, Clock } from 'lucide-react';
-
-interface RouteStop {
+import { Phone, MessageSquare } from 'lucide-react';
+import Header from './../../components/SchoolBus/Header';
+import Footer from './../../components/SchoolBus/Footer';
+interface RouteStation {
   name: string;
-  pickupTime: string;
+  pickTime: string;
   dropTime: string;
 }
 
-interface BusDetails {
-  driver: {
-    name: string;
-    phone: string;
-  };
-  assistant: {
-    name: string;
-    phone: string;
-  };
-  route: {
-    number: string;
-    stops: RouteStop[];
-  };
+interface StaffMember {
+  role: string;
+  name: string;
+  phone: string;
 }
 
-const DUMMY_DETAILS: BusDetails = {
-  driver: {
-    name: 'Robert Wilson',
-    phone: '+1234567890'
-  },
-  assistant: {
-    name: 'Sarah Thompson',
-    phone: '+1234567891'
-  },
-  route: {
-    number: 'R123',
-    stops: [
-      {
-        name: 'Green Park',
-        pickupTime: '7:30 AM',
-        dropTime: '3:30 PM'
-      },
-      {
-        name: 'Central Square',
-        pickupTime: '7:45 AM',
-        dropTime: '3:45 PM'
-      },
-      {
-        name: 'School',
-        pickupTime: '8:00 AM',
-        dropTime: '3:15 PM'
-      }
-    ]
-  }
-};
+export default function MyAccount() {
+  const schoolName = "ABC School";
+  const staff: StaffMember[] = [
+    {
+      role: "Transport Head",
+      name: "Robert Wilson",
+      phone: "+1234567890"
+    },
+    {
+      role: "Driver",
+      name: "John Driver",
+      phone: "+1234567891"
+    },
+    {
+      role: "Assistant",
+      name: "Jane Assistant",
+      phone: "+1234567892"
+    }
+  ];
 
-export const MyAccount: React.FC = () => {
+  const route: RouteStation[] = [
+    {
+      name: "Green Valley",
+      pickTime: "7:30 AM",
+      dropTime: "3:40 PM"
+    },
+    {
+      name: "Riverside Park",
+      pickTime: "7:40 AM",
+      dropTime: "3:30 PM"
+    },
+    {
+      name: "Oak Street",
+      pickTime: "7:50 AM",
+      dropTime: "3:20 PM"
+    },
+    {
+      name: "Maple Avenue",
+      pickTime: "8:00 AM",
+      dropTime: "3:15 PM"
+    },
+    {
+      name: "Pine Heights",
+      pickTime: "8:10 AM",
+      dropTime: "3:10 PM"
+    },
+    {
+      name: "Cedar Lane",
+      pickTime: "8:20 AM",
+      dropTime: "3:05 PM"
+    },
+    {
+      name: "Birch Road",
+      pickTime: "8:30 AM",
+      dropTime: "3:00 PM"
+    },
+    {
+      name: "Elm Street",
+      pickTime: "8:40 AM",
+      dropTime: "2:55 PM"
+    },
+    {
+      name: "School",
+      pickTime: "8:50 AM",
+      dropTime: "2:45 PM"
+    }
+  ];
+
   return (
-    <div className="flex-1 p-4 space-y-6">
-      {/* Staff Details */}
-      <section className="space-y-4">
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="flex items-center space-x-3 mb-4">
-            <User size={24} className="text-blue-500" />
-            <h2 className="text-lg font-semibold">Driver</h2>
-          </div>
-          <p className="font-medium">{DUMMY_DETAILS.driver.name}</p>
-          <a
-            href={`tel:${DUMMY_DETAILS.driver.phone}`}
-            className="flex items-center space-x-2 text-blue-600 mt-2"
-          >
-            <Phone size={20} />
-            <span>{DUMMY_DETAILS.driver.phone}</span>
-          </a>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="flex items-center space-x-3 mb-4">
-            <User size={24} className="text-blue-500" />
-            <h2 className="text-lg font-semibold">Assistant</h2>
-          </div>
-          <p className="font-medium">{DUMMY_DETAILS.assistant.name}</p>
-          <a
-            href={`tel:${DUMMY_DETAILS.assistant.phone}`}
-            className="flex items-center space-x-2 text-blue-600 mt-2"
-          >
-            <Phone size={20} />
-            <span>{DUMMY_DETAILS.assistant.phone}</span>
-          </a>
-        </div>
-      </section>
-
-      {/* Route Details */}
-      <section>
-        <div className="bg-white rounded-lg shadow p-4">
-          <div className="flex items-center space-x-3 mb-4">
-            <MapPin size={24} className="text-blue-500" />
-            <h2 className="text-lg font-semibold">Route {DUMMY_DETAILS.route.number}</h2>
-          </div>
+    <div className="min-h-screen bg-gray-100 pb-16 pt-16">
+      <Header />
+      
+      <div className="p-4 space-y-4">
+        <div className="bg-white rounded-lg p-4 shadow">
+          <h2 className="text-xl font-bold mb-4">{schoolName}</h2>
           
-          <div className="space-y-4">
-            {DUMMY_DETAILS.route.stops.map((stop, index) => (
-              <div key={index} className="border-b last:border-0 pb-4 last:pb-0">
-                <h3 className="font-medium mb-2">{stop.name}</h3>
-                <div className="flex items-center space-x-4 text-sm text-gray-600">
-                  <div className="flex items-center space-x-1">
-                    <Clock size={16} />
-                    <span>Pick: {stop.pickupTime}</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    <Clock size={16} />
-                    <span>Drop: {stop.dropTime}</span>
-                  </div>
+          {staff.map((member, index) => (
+            <div key={index} className="mb-4 last:mb-0">
+              <h3 className="font-semibold">{member.role}</h3>
+              <p className="text-gray-600">{member.name}</p>
+              
+              <div className="flex items-center space-x-4 mt-2">
+                <a
+                  href={`tel:${member.phone}`}
+                  className="flex items-center space-x-1 text-blue-600"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>Call</span>
+                </a>
+                
+                <a
+                  href={`https://wa.me/${member.phone}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-1 text-green-600"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-white rounded-lg p-4 shadow">
+          <h3 className="font-semibold mb-4">Route Schedule</h3>
+          
+          <div className="space-y-3">
+            {route.map((station, index) => (
+              <div key={index} className="border-b last:border-0 pb-3">
+                <h4 className="font-medium">{station.name}</h4>
+                <div className="text-sm text-gray-600">
+                  <p>Morning Pick-up: {station.pickTime}</p>
+                  <p>Afternoon Drop-off: {station.dropTime}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
+      </div>
+
+      <Footer />
     </div>
   );
-};
+}
