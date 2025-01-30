@@ -21,11 +21,12 @@ import LinkChild from "./pages/parents/LinkChild";
 import ChildProfile from "./pages/parents/ChildProfile";
 
 // Attendance Officer Pages
-import { AttendanceOfficerDashboard } from "./pages/attendance-officer/AttendanceOfficerDashboard";
-import { GPSAttendance } from "./pages/attendance-officer/GPSAttendance";
-import { StudentSearch } from "./pages/attendance-officer/StudentSearch";
-import { Contacts } from "./pages/attendance-officer/Contacts";
-import { StudentTap } from "./pages/attendance-officer/StudentTap";
+import  AttendanceOfficerHome  from "./pages/attendance-officer/index";
+import  GPSAttendance  from "./pages/attendance-officer/gps-attend";
+import  StudentSearch  from "./pages/attendance-officer/student-search";
+import  Contacts  from "./pages/attendance-officer/contacts";
+import StudentProfile from "./pages/attendance-officer/student-account";
+import  TapAttendance  from "./pages/attendance-officer/TapAttendance";
 
 // School Bus Pages
 
@@ -143,49 +144,15 @@ function App() {
           </Route>
 
           {/* Attendance Officer Routes */}
-          <Route
-            path="/attendance-officer"
-            element={
-              <ProtectedRoute>
-                <AttendanceOfficerDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/attendance-officer/gps-attnd"
-            element={
-              <ProtectedRoute>
-                <GPSAttendance />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/attendance-officer/search"
-            element={
-              <ProtectedRoute>
-                <StudentSearch />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/attendance-officer/contacts"
-            element={
-              <ProtectedRoute>
-                <Contacts />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/attendance-officer/tap"
-            element={
-              <ProtectedRoute>
-                <StudentTap />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/attendance-officer" element={<ProtectedRoute><AttendanceOfficerHome /></ProtectedRoute>} />
+        <Route path="/attendance-officer/gps-attnd" element={<ProtectedRoute><GPSAttendance /></ProtectedRoute>} />
+        <Route path="/attendance-officer/search" element={<ProtectedRoute><StudentSearch /></ProtectedRoute>} />
+        <Route path="/attendance-officer/contacts" element={<ProtectedRoute><Contacts /></ProtectedRoute>} />
+        <Route path="/attendance-officer/tap" element={<ProtectedRoute><TapAttendance /></ProtectedRoute>} />
+        <Route path="/attendance-officer/account" element={<ProtectedRoute><StudentProfile /></ProtectedRoute>} />
 
-          {/* School Bus Routes */}
-          <Route
+         {/* School Bus Routes */}
+         <Route
             path="/school-bus/*"
             element={
               <ProtectedRoute>
@@ -193,6 +160,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
 
           {/* Admin Routes */}
           <Route
