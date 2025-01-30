@@ -29,14 +29,12 @@ import { StudentTap } from "./pages/attendance-officer/StudentTap";
 
 // School Bus Pages
 
-
 import StudentList from "./pages/school-bus/StudentList";
 import TripHistory from "./pages/school-bus/TripHistory";
 import MyAccount from "./pages/school-bus/MyAccount";
 import Home from "./pages/school-bus/BusHome";
 import Trip from "./pages/school-bus/Trip";
 import TripStart from "./pages/school-bus/TripStart";
-
 
 // Admin Pages
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
@@ -67,12 +65,54 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
 function SchoolBusRoutes() {
   return (
     <Routes>
-      <Route path="" element={<Home />} />
-      <Route path="trip" element={<Trip />} />
-      <Route path="trip-start" element={<TripStart />} />
-      <Route path="student" element={<StudentList />} />
-      <Route path="history" element={<TripHistory />} />
-      <Route path="my-account" element={<MyAccount />} />
+      <Route
+        path=""
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="trip"
+        element={
+          <ProtectedRoute>
+            <Trip />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="trip-start"
+        element={
+          <ProtectedRoute>
+            <TripStart />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="student"
+        element={
+          <ProtectedRoute>
+            <StudentList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="history"
+        element={
+          <ProtectedRoute>
+            <TripHistory />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="my-account"
+        element={
+          <ProtectedRoute>
+            <MyAccount />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }
