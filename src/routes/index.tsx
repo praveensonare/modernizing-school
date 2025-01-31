@@ -6,6 +6,7 @@ import ParentRoutes from "./ParentRoutes";
 import AttendanceOfficerRoutes from "./AttendanceOfficerRoutes";
 import SchoolBusRoutes from "./SchoolBusRoutes";
 import AdminRoutes from "./AdminRoutes";
+import TeacherRoutes from "./TeacherRoutes";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -23,6 +24,12 @@ const AppRoutes: React.FC = () => {
 
       {/* Admin Routes */}
       <Route path="/admin/*" element={<AdminRoutes />} />
+
+       {/* Teacher Routes */}
+        <Route path="/teacher/*" element={<TeacherRoutes />} />
+
+
+      
 
 
       {/* Redirect root to login */}

@@ -4,7 +4,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import AttendanceOfficerHome from "../pages/attendance-officer/index";
 import GPSAttendance from "../pages/attendance-officer/gps-attend";
 import StudentSearch from "../pages/attendance-officer/student-search";
-import Contacts from "../pages/attendance-officer/Contacts";
+import Contacts from "./../pages/attendance-officer/contacts";
 import TapAttendance from "../pages/attendance-officer/TapAttendance";
 import StudentProfile from "../pages/attendance-officer/student-account";
 
