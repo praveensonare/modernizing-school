@@ -13,10 +13,10 @@ function TeacherRoutes() {
     <Layout>
       <Routes>
         <Route path="/" element={<ProtectedRoute><TeacherDashboard /></ProtectedRoute>} />
-        <Route path="/teacher/inbox" element={<ProtectedRoute><TeacherInbox /></ProtectedRoute>} />
-        <Route path="/teacher/meeting" element={<ProtectedRoute><TeacherMeeting /></ProtectedRoute>} />
-        <Route path="/teacher/myclass" element={<ProtectedRoute><TeacherMyClass /></ProtectedRoute>} />
-        <Route path="/teacher/myprofile" element={<ProtectedRoute><TeacherProfile /></ProtectedRoute>} />
+        <Route path="/inbox" element={<ProtectedRoute><TeacherInbox /></ProtectedRoute>} />
+        <Route path="/meeting" element={<ProtectedRoute><TeacherMeeting /></ProtectedRoute>} />
+        <Route path="/myclass" element={<ProtectedRoute><TeacherMyClass /></ProtectedRoute>} />
+        <Route path="/myprofile" element={<ProtectedRoute><TeacherProfile /></ProtectedRoute>} />
       </Routes>
     </Layout>
   );
