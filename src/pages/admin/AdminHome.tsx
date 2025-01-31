@@ -1,6 +1,7 @@
+
+
 import React, { useEffect } from 'react';
 import { Bus, User, Users } from 'lucide-react';
-import { Loader } from '@googlemaps/js-api-loader';
 import { cn } from '../../lib/utils';
 
 interface RecentCheckIn {
@@ -104,57 +105,9 @@ const busRoutes: BusRoute[] = [
 ];
 
 export function AdminHome() {
-  useEffect(() => {
-    const loader = new Loader({
-      apiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
-      version: 'weekly',
-    });
-
-    loader.load().then(() => {
-      const map = new google.maps.Map(document.getElementById('map')!, {
-        center: { lat: 12.9716, lng: 77.5946 },
-        zoom: 12,
-      });
-
-      // Add bus markers
-      busRoutes.forEach(route => {
-        if (route.currentLocation) {
-          const marker = new google.maps.Marker({
-            position: route.currentLocation,
-            map,
-            icon: {
-              url: 'https://maps.google.com/mapfiles/ms/icons/bus.png',
-              scaledSize: new google.maps.Size(32, 32),
-            },
-            title: `Route ${route.routeNumber}`,
-          });
-
-          const infoWindow = new google.maps.InfoWindow({
-            content: `
-              <div class="p-2">
-                <h3 class="font-semibold">Route ${route.routeNumber}</h3>
-                <p>Bus: ${route.busNumber}</p>
-                <p>Driver: ${route.driver.name}</p>
-                <p>Phone: ${route.driver.phone}</p>
-              </div>
-            `,
-          });
-
-          marker.addListener('mouseover', () => {
-            infoWindow.open(map, marker);
-          });
-
-          marker.addListener('mouseout', () => {
-            infoWindow.close();
-          });
-        }
-      });
-    });
-  }, []);
-
   return (
     <div className="grid grid-cols-12 gap-6">
-      {/* Recent Check-ins */}
+      
       <div className="col-span-4 bg-white rounded-lg shadow-sm p-6">
         <h2 className="text-lg font-semibold mb-4">Recent Check-ins</h2>
         <div className="space-y-4">
@@ -196,7 +149,15 @@ export function AdminHome() {
       <div className="col-span-8 space-y-6">
         {/* Google Map */}
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <div id="map" className="w-full h-[500px] rounded-lg"></div>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14683.264204204204!2d75.857725!3d22.719568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fc1c5b5b5b5b%3A0x5b5b5b5b5b5b5b5b!2sIndore%2C%20Madhya%20Pradesh%2C%20India!5e0!3m2!1sen!2sus!4v1616161616161!5m2!1sen!2sus"
+            width="100%"
+            height="400"
+            style={{ border: 0 }}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
         </div>
 
         {/* Bus Routes */}
@@ -230,3 +191,4 @@ export function AdminHome() {
     </div>
   );
 }
+
