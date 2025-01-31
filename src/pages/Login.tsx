@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Users, School, Bus, UserCheck, User, Mail, LogIn } from 'lucide-react';
 import { auth, signInWithGooglePopup } from "../firebase";
 import { sendSignInLinkToEmail } from "firebase/auth";
-import { useAuth } from '../store/auth';
+import { useAuth } from '../store/useAuth';
 
 const userTypeData = {
   admin: { title: 'Administrator', description: 'School administration and management', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800', icon: Users },

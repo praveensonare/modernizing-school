@@ -1,11 +1,11 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Login } from "../pages/Login";
-import ProtectedRoute from "../components/ProtectedRoute";
+
 import ParentRoutes from "./ParentRoutes";
 import AttendanceOfficerRoutes from "./AttendanceOfficerRoutes";
 import SchoolBusRoutes from "./SchoolBusRoutes";
-import { AdminDashboard } from "../pages/admin/AdminDashboard";
+import AdminRoutes from "./AdminRoutes";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -22,7 +22,8 @@ const AppRoutes: React.FC = () => {
       <Route path="/school-bus/*" element={<SchoolBusRoutes />} />
 
       {/* Admin Routes */}
-      <Route path="/admin/*" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/*" element={<AdminRoutes />} />
+
 
       {/* Redirect root to login */}
       <Route path="/" element={<Navigate to="/login" replace />} />
