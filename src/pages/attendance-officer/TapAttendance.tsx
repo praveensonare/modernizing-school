@@ -17,6 +17,7 @@ const student = {
   }
 };
 
+
 export default function TapAttendance() {
   const status = localStorage.getItem('attendanceStatus');
 
