@@ -8,6 +8,7 @@ import Contacts from "./../pages/attendance-officer/Contacts";
 import TapAttendance from "../pages/attendance-officer/TapAttendance";
 import StudentProfile from "../pages/attendance-officer/student-account";
 
+
 const AttendanceOfficerRoutes: React.FC = () => {
   return (
     <Routes>
