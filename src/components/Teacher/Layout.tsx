@@ -12,6 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
 
   const handleLogout = () => {
     localStorage.clear();
+    
     navigate('/login');
   };
 
