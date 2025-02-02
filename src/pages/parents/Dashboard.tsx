@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Book, Bus as BusIcon, Phone, MessageSquare } from 'lucide-react';
+import GoogleMapView from './GoogleMap/GoogleMapView';
 
 interface Child {
   id: string;
@@ -25,6 +26,7 @@ interface Child {
     };
   };
 }
+
 
 const children: Child[] = [
   {
@@ -100,7 +102,11 @@ const children: Child[] = [
     }
   }
 ];
-
+const locations = [
+  { latitude: 40.7128, longitude: -74.0060, title: "New York" },
+  { latitude: 34.0522, longitude: -118.2437, title: "Los Angeles" },
+  { latitude: 41.8781, longitude: -87.6298, title: "Chicago" }
+];
 // Group children by route number
 const groupChildrenByRoute = (children: Child[]) => {
   return children.reduce((acc, child) => {
@@ -131,7 +137,11 @@ export default function Dashboard() {
         <div className="aspect-video bg-gray-100 rounded-lg mb-4">
           {/* Google Maps integration would go here */}
           <div className="w-full h-full flex items-center justify-center text-gray-500">
-            Google Maps Integration
+            <GoogleMapView
+              locations={locations}
+              defaultZoom={10}
+              centerLocation={locations[0]} // Optional: specify center location
+            />
           </div>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -160,11 +170,10 @@ export default function Dashboard() {
             <div key={child.id} className="p-4 border rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="font-medium">{child.name}</h3>
-                <span className={`px-2 py-1 text-xs rounded-full ${
-                  child.schoolStatus.isPresent
+                <span className={`px-2 py-1 text-xs rounded-full ${child.schoolStatus.isPresent
                     ? 'bg-green-100 text-green-800'
                     : 'bg-red-100 text-red-800'
-                }`}>
+                  }`}>
                   {child.schoolStatus.isPresent ? 'Present' : 'Absent'}
                 </span>
               </div>
@@ -203,7 +212,7 @@ export default function Dashboard() {
                   {data.children.length} children
                 </span>
               </div>
-              
+
               <p className="text-sm text-gray-600 mb-4">
                 Children: {data.children.join(', ')}
               </p>

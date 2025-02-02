@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.8",
+    "@react-google-maps/api": "^2.20.5",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "firebase": "^11.2.0",
