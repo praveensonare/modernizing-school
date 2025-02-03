@@ -370,9 +370,10 @@ export function Transport() {
         </div>
       )}
 
+      {/* New Route Form Modal */}
       {showNewRouteForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold">Create New Route</h2>
               <button
@@ -610,6 +611,11 @@ export function Transport() {
                         <X size={20} />
                       </button>
                     </div>
+		    
+		    // Enable these lines after fixing map
+                    //<div className="col-span-5 text-sm text-gray-600">
+                    //  Location: {station.location.lat.toFixed(6)}, {station.location.lng.toFixed(6)}
+                    //</div>
                   </div>
                 ))}
               </div>
