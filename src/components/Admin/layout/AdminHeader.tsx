@@ -16,14 +16,14 @@ export function AdminHeader() {
   };
 
   return (
-    <header className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between">
+    <header className="h-16 bg-gray-900 border-b border-gray-800 px-6 flex items-center justify-between">
       <div className="flex items-center gap-4">
-        <Link to="/admin" className="text-blue-600 hover:text-blue-700">
+        <Link to="/admin" className="text-blue-400 hover:text-blue-300">
           <Home size={24} />
         </Link>
         <Link
           to="https://school-website.com"
-          className="text-lg font-semibold text-gray-800 hover:text-blue-600"
+          className="text-lg font-semibold text-gray-100 hover:text-blue-300"
         >
           International School
         </Link>
@@ -45,7 +45,7 @@ export function AdminHeader() {
         {profileOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
             <Link
-              to="/admin/profile"
+              to="/admin/myprofile"
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
             >
               My Profile

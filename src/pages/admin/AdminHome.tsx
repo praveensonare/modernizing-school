@@ -1,8 +1,7 @@
-
-
-import React, { useEffect } from 'react';
-import { Bus, User, Users } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import React, { useEffect, useRef, useState } from 'react';
+import { Bus, User, Users, X, Phone, MessageSquare } from 'lucide-react';
+import { Loader } from '@googlemaps/js-api-loader';
+import { cn, formatTime } from '../../lib/utils';
 
 interface RecentCheckIn {
   id: string;
@@ -18,20 +17,23 @@ interface BusRoute {
   routeNumber: string;
   capacity: number;
   registered: number;
-  status: 'on-duty' | 'off-duty';
+  status: 'OTW' | 'Destination';
   busNumber: string;
   driver: {
     name: string;
     phone: string;
+    whatsapp: string;
   };
   assistant: {
     name: string;
     phone: string;
+    whatsapp: string;
   };
   currentLocation?: {
     lat: number;
     lng: number;
   };
+  lastKnownLocation: string;
 }
 
 const recentCheckIns: RecentCheckIn[] = [
@@ -67,47 +69,102 @@ const busRoutes: BusRoute[] = [
     routeNumber: 'R101',
     capacity: 40,
     registered: 35,
-    status: 'on-duty',
+    status: 'OTW',
     busNumber: 'KA01AB1234',
     driver: {
       name: 'David Johnson',
       phone: '+1234567890',
+      whatsapp: '+1234567890',
     },
     assistant: {
       name: 'Sarah Wilson',
       phone: '+1234567891',
+      whatsapp: '+1234567891',
     },
     currentLocation: {
       lat: 12.9716,
       lng: 77.5946,
     },
+    lastKnownLocation: 'Central Park, Main Road',
   },
   {
     id: '2',
     routeNumber: 'R102',
     capacity: 35,
     registered: 30,
-    status: 'on-duty',
+    status: 'Destination',
     busNumber: 'KA01CD5678',
     driver: {
       name: 'Robert Smith',
       phone: '+1234567892',
+      whatsapp: '+1234567892',
     },
     assistant: {
       name: 'Mary Brown',
       phone: '+1234567893',
+      whatsapp: '+1234567893',
     },
     currentLocation: {
       lat: 12.9815,
       lng: 77.5968,
     },
+    lastKnownLocation: 'School Campus',
   },
 ];
 
 export function AdminHome() {
+  const [selectedRoute, setSelectedRoute] = useState<BusRoute | null>(null);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const loader = new Loader({
+      apiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
+      version: 'weekly',
+    });
+
+    loader.load().then(() => {
+      const map = new google.maps.Map(document.getElementById('map')!, {
+        center: { lat: 12.9716, lng: 77.5946 },
+        zoom: 12,
+        styles: [
+          {
+            featureType: 'poi',
+            elementType: 'labels',
+            stylers: [{ visibility: 'off' }],
+          },
+        ],
+      });
+
+      // Add bus markers
+      busRoutes.forEach(route => {
+        if (route.currentLocation) {
+          const marker = new google.maps.Marker({
+            position: route.currentLocation,
+            map,
+            icon: {
+              url: 'https://maps.google.com/mapfiles/ms/icons/bus.png',
+              scaledSize: new google.maps.Size(32, 32),
+            },
+            title: `Route ${route.routeNumber}`,
+          });
+        }
+      });
+    });
+
+    // Handle click outside popup
+    function handleClickOutside(event: MouseEvent) {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setSelectedRoute(null);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div className="grid grid-cols-12 gap-6">
-      
+      {/* Recent Check-ins */}
       <div className="col-span-4 bg-white rounded-lg shadow-sm p-6">
         <h2 className="text-lg font-semibold mb-4">Recent Check-ins</h2>
         <div className="space-y-4">
@@ -124,15 +181,12 @@ export function AdminHome() {
               <div className="flex-1">
                 <h3 className="font-medium">{checkIn.name}</h3>
                 <p className="text-sm text-gray-500">
-                  Class {checkIn.class}
+                  {checkIn.class}
                 </p>
               </div>
               <div className="text-right">
                 <p className="text-sm font-medium">
-                  {checkIn.checkInTime.toLocaleTimeString('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
+                  {formatTime(checkIn.checkInTime)}
                 </p>
                 <div className="mt-1">
                   {checkIn.droppedBy === 'bus' && <Bus size={20} className="text-blue-600" />}
@@ -149,46 +203,138 @@ export function AdminHome() {
       <div className="col-span-8 space-y-6">
         {/* Google Map */}
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14683.264204204204!2d75.857725!3d22.719568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3962fc1c5b5b5b5b%3A0x5b5b5b5b5b5b5b5b!2sIndore%2C%20Madhya%20Pradesh%2C%20India!5e0!3m2!1sen!2sus!4v1616161616161!5m2!1sen!2sus"
-            width="100%"
-            height="400"
-            style={{ border: 0 }}
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          ></iframe>
+          <div id="map" className="w-full h-[400px] rounded-lg"></div>
         </div>
 
         {/* Bus Routes */}
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {busRoutes.map((route) => (
             <div
               key={route.id}
-              className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow cursor-pointer"
+              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => setSelectedRoute(route)}
             >
-              <div className="flex items-center gap-3 mb-2">
-                <Bus className="text-blue-600" />
-                <h3 className="font-medium">Route {route.routeNumber}</h3>
+              <div className="flex p-4">
+                <div className="w-24 h-24 rounded-lg overflow-hidden">
+                  <img
+                    src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957"
+                    alt="Bus"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="ml-4 flex-1">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-medium">Route {route.routeNumber}</h3>
+                      <p className="text-sm text-gray-500">Bus: {route.busNumber}</p>
+                    </div>
+                    <span
+                      className={cn(
+                        'px-2 py-1 rounded-full text-xs',
+                        route.status === 'OTW'
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-green-100 text-green-700'
+                      )}
+                    >
+                      {route.status}
+                    </span>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-600">
+                      {route.registered}/{route.capacity} Students
+                    </p>
+                  </div>
+                </div>
               </div>
-              <p className="text-sm text-gray-500">
-                {route.registered}/{route.capacity} Students
-              </p>
-              <span
-                className={cn(
-                  'inline-block px-2 py-1 rounded-full text-xs mt-2',
-                  route.status === 'on-duty'
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-red-100 text-red-700'
-                )}
-              >
-                {route.status === 'on-duty' ? 'On Duty' : 'Off Duty'}
-              </span>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Route Details Popup */}
+      {selectedRoute && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-start z-50">
+          <div
+            ref={popupRef}
+            className="bg-white rounded-t-lg sm:rounded-lg shadow-xl p-6 m-4 max-w-md w-full"
+          >
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-lg font-medium">
+                  Route {selectedRoute.routeNumber}
+                </h3>
+                <p className="text-sm text-gray-500">Bus: {selectedRoute.busNumber}</p>
+              </div>
+              <button
+                onClick={() => setSelectedRoute(null)}
+                className="p-1 hover:bg-gray-100 rounded-full"
+              >
+                <X size={20} className="text-gray-500" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm font-medium text-gray-700">Last Known Location</p>
+                <p className="text-sm text-gray-600">{selectedRoute.lastKnownLocation}</p>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-gray-700">Students Onboard</p>
+                <p className="text-sm text-gray-600">
+                  {selectedRoute.registered} out of {selectedRoute.capacity}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-gray-700">Driver</p>
+                <p className="text-sm text-gray-600">{selectedRoute.driver.name}</p>
+                <div className="mt-1 flex gap-2">
+                  <a
+                    href={`tel:${selectedRoute.driver.phone}`}
+                    className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700"
+                  >
+                    <Phone size={16} />
+                    <span className="text-sm">Call</span>
+                  </a>
+                  <a
+                    href={`https://wa.me/${selectedRoute.driver.whatsapp.replace(/\+/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-green-600 hover:text-green-700"
+                  >
+                    <MessageSquare size={16} />
+                    <span className="text-sm">WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-sm font-medium text-gray-700">Assistant</p>
+                <p className="text-sm text-gray-600">{selectedRoute.assistant.name}</p>
+                <div className="mt-1 flex gap-2">
+                  <a
+                    href={`tel:${selectedRoute.assistant.phone}`}
+                    className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700"
+                  >
+                    <Phone size={16} />
+                    <span className="text-sm">Call</span>
+                  </a>
+                  <a
+                    href={`https://wa.me/${selectedRoute.assistant.whatsapp.replace(/\+/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-green-600 hover:text-green-700"
+                  >
+                    <MessageSquare size={16} />
+                    <span className="text-sm">WhatsApp</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
