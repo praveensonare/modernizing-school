@@ -1,13 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './../../components/SchoolBus/Header';
 import Footer from './../../components/SchoolBus/Footer';
 
 export default function Trip() {
   const [tripType, setTripType] = useState<'pick' | 'drop' | null>(null);
+  const [ongoingTrip, setOngoingTrip] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Check if there's an ongoing trip
+    // This would typically be an API call
+    checkOngoingTrip();
+  }, []);
+
+  const checkOngoingTrip = () => {
+    // Simulating an API call
+    const hasOngoingTrip = localStorage.getItem('ongoingTrip') === 'true';
+    setOngoingTrip(hasOngoingTrip);
+    
+    if (hasOngoingTrip) {
+      navigate('/school-bus/trip-start');
+    }
+  };
+
   const handleStartTrip = () => {
+    localStorage.setItem('ongoingTrip', 'true');
     navigate('/school-bus/trip-start');
   };
 
@@ -28,6 +46,7 @@ export default function Trip() {
                     ? 'border-blue-600 bg-blue-50 text-blue-600'
                     : 'border-gray-300'
                 }`}
+                disabled={ongoingTrip}
               >
                 Pick
               </button>
@@ -39,12 +58,13 @@ export default function Trip() {
                     ? 'border-blue-600 bg-blue-50 text-blue-600'
                     : 'border-gray-300'
                 }`}
+                disabled={ongoingTrip}
               >
                 Drop
               </button>
             </div>
 
-            {tripType && (
+            {tripType && !ongoingTrip && (
               <button
                 onClick={handleStartTrip}
                 className="w-full bg-blue-600 text-white py-3 rounded-lg
@@ -52,6 +72,12 @@ export default function Trip() {
               >
                 Start Trip
               </button>
+            )}
+
+            {ongoingTrip && (
+              <div className="text-center text-gray-600">
+                There is an ongoing trip. New trips can only be started after the current trip is finished.
+              </div>
             )}
           </div>
         </div>
