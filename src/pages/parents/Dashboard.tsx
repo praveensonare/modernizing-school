@@ -127,7 +127,7 @@ export default function Dashboard() {
   const routeGroups = groupChildrenByRoute(children);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Location Section */}
       <section className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-2xl font-semibold mb-4 flex items-center">
@@ -148,12 +148,14 @@ export default function Dashboard() {
           {children.map((child) => (
             <div
               key={child.id}
-              className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center p-3 border rounded-lg hover:bg-gray-50 transition-all"
             >
-              <h3 className="font-medium">{child.name}</h3>
-              <p className="text-sm text-gray-500">
-                {child.location} • {child.lastSeen}
-              </p>
+              <div>
+                <h3 className="font-medium">{child.name}</h3>
+                <p className="text-sm text-gray-500">
+                  {child.location} • {child.lastSeen}
+                </p>
+              </div>
             </div>
           ))}
         </div>
@@ -167,29 +169,32 @@ export default function Dashboard() {
         </h2>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {children.map((child) => (
-            <div key={child.id} className="p-4 border rounded-lg">
-              <div className="flex items-center justify-between mb-2">
+            <div key={child.id} className="p-3 border rounded-lg">
+              <div className="flex items-center justify-between mb-1">
                 <h3 className="font-medium">{child.name}</h3>
-                <span className={`px-2 py-1 text-xs rounded-full ${child.schoolStatus.isPresent
+                <span className={`px-2 py-0.5 text-xs rounded-full ${
+                  child.schoolStatus.isPresent
                     ? 'bg-green-100 text-green-800'
                     : 'bg-red-100 text-red-800'
-                  }`}>
+                }`}>
                   {child.schoolStatus.isPresent ? 'Present' : 'Absent'}
                 </span>
               </div>
-              <p className="text-sm text-gray-500 mb-2">{child.class}</p>
-              <div className="space-y-1">
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Check In:</span>
-                  <span className={child.schoolStatus.checkIn ? 'text-green-600' : 'text-red-500'}>
-                    {child.schoolStatus.checkIn || 'NA'}
-                  </span>
+              <p className="text-xs text-gray-500 mb-1">{child.class}</p>
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className={`px-2 py-1 rounded ${
+                  child.schoolStatus.checkIn 
+                    ? 'bg-emerald-50 text-emerald-700' 
+                    : 'bg-red-50 text-red-700'
+                }`}>
+                  {child.schoolStatus.checkIn || 'NA'}
                 </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Check Out:</span>
-                  <span className={child.schoolStatus.checkOut ? 'text-green-600' : 'text-gray-500'}>
-                    {child.schoolStatus.checkOut || 'NA'}
-                  </span>
+                <div className={`px-2 py-1 rounded ${
+                  child.schoolStatus.checkOut 
+                    ? 'bg-orange-50 text-orange-700' 
+                    : 'bg-gray-50 text-gray-500'
+                }`}>
+                  {child.schoolStatus.checkOut || 'NA'}
                 </div>
               </div>
             </div>
@@ -203,67 +208,63 @@ export default function Dashboard() {
           <BusIcon className="mr-2 text-yellow-500" />
           Transport Status
         </h2>
-        <div className="space-y-6">
+        <div className="space-y-4">
           {Object.entries(routeGroups).map(([routeNumber, data]) => (
             <div key={routeNumber} className="border rounded-lg p-4">
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between mb-2">
                 <h3 className="font-medium">Route: {routeNumber}</h3>
                 <span className="text-sm text-gray-500">
                   {data.children.length} children
                 </span>
               </div>
-
-              <p className="text-sm text-gray-600 mb-4">
-                Children: {data.children.join(', ')}
+              
+              <p className="text-sm text-gray-600 mb-3">
+                {data.children.join(', ')}
               </p>
 
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Driver:</span>
-                    <span className="text-sm">{data.driver.name}</span>
-                  </div>
+              <div className="space-y-2">
+                <div className="flex items-center">
+                  <span className="text-sm font-medium w-24">Driver:</span>
+                  <span className="text-sm mr-4">{data.driver.name}</span>
                   <div className="flex space-x-2">
                     <a
                       href={`tel:${data.driver.phone}`}
-                      className="flex-1 flex items-center justify-center space-x-2 px-3 py-1.5 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200"
+                      className="p-1.5 bg-blue-100 text-blue-600 rounded hover:bg-blue-200"
+                      title="Call Driver"
                     >
                       <Phone size={14} />
-                      <span className="text-sm">Call</span>
                     </a>
                     <a
                       href={`https://wa.me/${data.driver.phone}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center space-x-2 px-3 py-1.5 bg-green-100 text-green-600 rounded-md hover:bg-green-200"
+                      className="p-1.5 bg-green-100 text-green-600 rounded hover:bg-green-200"
+                      title="WhatsApp Driver"
                     >
                       <MessageSquare size={14} />
-                      <span className="text-sm">WhatsApp</span>
                     </a>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Assistant:</span>
-                    <span className="text-sm">{data.assistant.name}</span>
-                  </div>
+                <div className="flex items-center">
+                  <span className="text-sm font-medium w-24">Assistant:</span>
+                  <span className="text-sm mr-4">{data.assistant.name}</span>
                   <div className="flex space-x-2">
                     <a
                       href={`tel:${data.assistant.phone}`}
-                      className="flex-1 flex items-center justify-center space-x-2 px-3 py-1.5 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200"
+                      className="p-1.5 bg-blue-100 text-blue-600 rounded hover:bg-blue-200"
+                      title="Call Assistant"
                     >
                       <Phone size={14} />
-                      <span className="text-sm">Call</span>
                     </a>
                     <a
                       href={`https://wa.me/${data.assistant.phone}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center space-x-2 px-3 py-1.5 bg-green-100 text-green-600 rounded-md hover:bg-green-200"
+                      className="p-1.5 bg-green-100 text-green-600 rounded hover:bg-green-200"
+                      title="WhatsApp Assistant"
                     >
                       <MessageSquare size={14} />
-                      <span className="text-sm">WhatsApp</span>
                     </a>
                   </div>
                 </div>

@@ -78,13 +78,19 @@ export default function Inbox() {
       children: selectedChildren
     });
     setComposing(false);
+    setSelectedType('');
+    setMessageContent('');
+    setSelectedChildren([]);
   };
 
   const MessageList = () => (
     <div className="border-r h-full bg-gray-50">
       <div className="p-4 border-b bg-white">
         <button
-          onClick={() => setComposing(true)}
+          onClick={() => {
+            setComposing(true);
+            setSelectedMessage(null);
+          }}
           className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
         >
           <PlusCircle size={20} className="mr-2" />
@@ -95,7 +101,10 @@ export default function Inbox() {
         {messages.map((message) => (
           <div
             key={message.id}
-            onClick={() => setSelectedMessage(message)}
+            onClick={() => {
+              setSelectedMessage(message);
+              setComposing(false);
+            }}
             className={`p-4 border-b cursor-pointer transition-all duration-200 ${
               !message.read ? 'bg-blue-50 hover:bg-blue-100' : 'bg-white hover:bg-gray-50'
             } ${selectedMessage?.id === message.id ? 'border-l-4 border-l-blue-500 shadow-sm' : ''}`}
@@ -123,82 +132,84 @@ export default function Inbox() {
   );
 
   const ComposeForm = () => (
-    <form onSubmit={handleSubmit} className="h-full flex flex-col bg-gray-50">
-      {isMobileView && (
-        <div className="p-4 border-b bg-white flex items-center">
-          <button
-            type="button"
-            onClick={() => setComposing(false)}
-            className="mr-4"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          <h2 className="text-lg font-semibold">New Message</h2>
-        </div>
-      )}
-      <div className="flex-grow p-6 space-y-6 overflow-y-auto">
-        <div className="bg-white p-6 rounded-lg shadow-sm">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Request Type
-          </label>
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            required
-          >
-            <option value="">Select request type</option>
-            {requestTypes.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </div>
+    <div className="h-full flex flex-col bg-gray-50" onClick={(e) => e.stopPropagation()}>
+      <form onSubmit={handleSubmit} className="h-full flex flex-col">
+        {isMobileView && (
+          <div className="p-4 border-b bg-white flex items-center">
+            <button
+              type="button"
+              onClick={() => setComposing(false)}
+              className="mr-4"
+            >
+              <ChevronLeft size={24} />
+            </button>
+            <h2 className="text-lg font-semibold">New Message</h2>
+          </div>
+        )}
+        <div className="flex-grow p-6 space-y-6 overflow-y-auto">
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Request Type
+            </label>
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              required
+            >
+              <option value="">Select request type</option>
+              {requestTypes.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Message
-          </label>
-          <textarea
-            value={messageContent}
-            onChange={(e) => setMessageContent(e.target.value)}
-            rows={6}
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Enter your message..."
-            required
-          />
-        </div>
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Message
+            </label>
+            <textarea
+              value={messageContent}
+              onChange={(e) => setMessageContent(e.target.value)}
+              rows={6}
+              className="w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Enter your message..."
+              required
+            />
+          </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm">
-          <label className="block text-sm font-medium text-gray-700 mb-3">
-            Select Children
-          </label>
-          <div className="space-y-3">
-            {children.map((child) => (
-              <label key={child.id} className="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={selectedChildren.includes(child.id)}
-                  onChange={() => handleChildToggle(child.id)}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-5 w-5"
-                />
-                <span className="text-gray-700 ml-3">{child.name}</span>
-              </label>
-            ))}
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Select Children
+            </label>
+            <div className="space-y-3">
+              {children.map((child) => (
+                <label key={child.id} className="flex items-center p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={selectedChildren.includes(child.id)}
+                    onChange={() => handleChildToggle(child.id)}
+                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-5 w-5"
+                  />
+                  <span className="text-gray-700 ml-3">{child.name}</span>
+                </label>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="p-4 bg-white border-t">
-        <button
-          type="submit"
-          className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-        >
-          <Send size={20} className="mr-2" />
-          Send Message
-        </button>
-      </div>
-    </form>
+        <div className="p-4 bg-white border-t">
+          <button
+            type="submit"
+            className="w-full flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          >
+            <Send size={20} className="mr-2" />
+            Send Message
+          </button>
+        </div>
+      </form>
+    </div>
   );
 
   const MessageView = () => (
