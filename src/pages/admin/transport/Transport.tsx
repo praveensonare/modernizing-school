@@ -611,11 +611,7 @@ export function Transport() {
                         <X size={20} />
                       </button>
                     </div>
-		    
-		    // Enable these lines after fixing map
-                    //<div className="col-span-5 text-sm text-gray-600">
-                    //  Location: {station.location.lat.toFixed(6)}, {station.location.lng.toFixed(6)}
-                    //</div>
+
                   </div>
                 ))}
               </div>
