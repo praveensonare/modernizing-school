@@ -1,11 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Home, ChevronDown } from 'lucide-react';
 import { useAuth } from '../../../store/useAuth';
 
 export function AdminHeader() {
   const [profileOpen, setProfileOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setProfileOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleLogout = () => {
 
@@ -29,7 +41,7 @@ export function AdminHeader() {
         </Link>
       </div>
 
-      <div className="relative">
+      <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setProfileOpen(!profileOpen)}
           className="flex items-center gap-2"
@@ -39,7 +51,7 @@ export function AdminHeader() {
             alt="Profile"
             className="w-10 h-10 rounded-full"
           />
-          <ChevronDown size={16} />
+          <ChevronDown size={16} className="text-gray-300" />
         </button>
 
         {profileOpen && (
