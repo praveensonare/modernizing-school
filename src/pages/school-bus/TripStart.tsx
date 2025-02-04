@@ -243,7 +243,7 @@ export default function TripStart() {
                   height="200"
                   frameBorder="0"
                   style={{ border: 0 }}
-                  src={`https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${currentStation.location.lat},${currentStation.location.lng}`}
+                  src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAC4adI5_5XusAtEBJkleRlvVouqpWnAVw&q=${currentStation.location.lat},${currentStation.location.lng}`}
                   allowFullScreen
                 ></iframe>
               </div>
