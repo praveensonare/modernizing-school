@@ -176,10 +176,10 @@ export function Transport() {
   }, []);
 
   const handleAddStation = () => {
-    //if (!selectedLocation) {
-    //  alert('Please select a location on the map first');
-    //  return;
-    //}
+    if (!selectedLocation) {
+      alert('Please select a location on the map first');
+      return;
+    }
 
     setFormData(prev => ({
       ...prev,
@@ -611,7 +611,9 @@ export function Transport() {
                         <X size={20} />
                       </button>
                     </div>
-
+                    <div className="col-span-5 text-sm text-gray-600">
+                      Location: {station.location.lat.toFixed(6)}, {station.location.lng.toFixed(6)}
+                    </div>
                   </div>
                 ))}
               </div>
