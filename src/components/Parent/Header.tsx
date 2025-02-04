@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Home, ChevronDown, LogOut, User, Bus, History, Inbox, UserPlus } from 'lucide-react';
 
 interface Child {
@@ -16,6 +16,7 @@ export default function Header() {
   ]);
   
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -27,6 +28,11 @@ export default function Header() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const handleMenuItemClick = (path: string) => {
+    navigate(path);
+    setIsProfileOpen(false);
+  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -67,21 +73,21 @@ export default function Header() {
 
         {isProfileOpen && (
           <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-            <Link to="/parent/profile" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+            <button onClick={() => handleMenuItemClick('/parent/profile')} className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
               <User size={16} className="mr-2" /> Profile
-            </Link>
-            <Link to="/parent/transport" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+            </button>
+            <button onClick={() => handleMenuItemClick('/parent/transport')} className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
               <Bus size={16} className="mr-2" /> Transport
-            </Link>
-            <Link to="/parent/history" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+            </button>
+            <button onClick={() => handleMenuItemClick('/parent/history')} className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
               <History size={16} className="mr-2" /> History
-            </Link>
-            <Link to="/parent/inbox" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+            </button>
+            <button onClick={() => handleMenuItemClick('/parent/inbox')} className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
               <Inbox size={16} className="mr-2" /> Inbox
-            </Link>
-            <Link to="/parent/link-child" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+            </button>
+            <button onClick={() => handleMenuItemClick('/parent/link-child')} className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
               <UserPlus size={16} className="mr-2" /> Link Child
-            </Link>
+            </button>
             <button
               onClick={handleLogout}
               className="flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
