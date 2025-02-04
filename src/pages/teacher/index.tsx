@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Clock, ArrowLeft } from 'lucide-react';
+import { Clock, ArrowLeft, BookOpen, Users } from 'lucide-react';
 import EnrollStudentModal from './../../components/Teacher/EnrollStudentModal';
 
 interface Student {
@@ -20,19 +20,67 @@ interface Schedule {
 const TeacherDashboard = () => {
   const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(null);
   const [showEnrollModal, setShowEnrollModal] = useState(false);
-  const [schedules, setSchedules] = useState<Schedule[]>([
+  const [schedules] = useState<Schedule[]>([
     {
       id: '1',
-      time: '09:00 AM - 10:30 AM',
+      time: '09:00 AM - 10:00 AM',
       topic: 'Mathematics - Algebra',
       totalStudents: 25,
       students: [
         { id: '1', name: 'John Doe', present: true },
         { id: '2', name: 'Jane Smith', present: false },
-        // Add more students as needed
       ]
     },
-    // Add more schedules as needed
+    {
+      id: '2',
+      time: '10:00 AM - 11:00 AM',
+      topic: 'English Literature',
+      totalStudents: 22,
+      students: [
+        { id: '3', name: 'Alice Johnson', present: true },
+        { id: '4', name: 'Bob Wilson', present: true },
+      ]
+    },
+    {
+      id: '3',
+      time: '11:00 AM - 12:00 PM',
+      topic: 'Physics - Mechanics',
+      totalStudents: 20,
+      students: [
+        { id: '5', name: 'Charlie Brown', present: false },
+        { id: '6', name: 'Diana Prince', present: true },
+      ]
+    },
+    {
+      id: '4',
+      time: '01:00 PM - 02:00 PM',
+      topic: 'Chemistry Lab',
+      totalStudents: 18,
+      students: [
+        { id: '7', name: 'Eve Anderson', present: true },
+        { id: '8', name: 'Frank Miller', present: true },
+      ]
+    },
+    {
+      id: '5',
+      time: '02:00 PM - 03:00 PM',
+      topic: 'Computer Science',
+      totalStudents: 24,
+      students: [
+        { id: '9', name: 'Grace Lee', present: true },
+        { id: '10', name: 'Henry Ford', present: false },
+      ]
+    },
+    {
+      id: '6',
+      time: '03:00 PM - 04:00 PM',
+      topic: 'History - World Wars',
+      totalStudents: 23,
+      students: [
+        { id: '11', name: 'Iris West', present: true },
+        { id: '12', name: 'Jack Ryan', present: true },
+      ]
+    }
   ]);
 
   const handleStudentSelection = (studentId: string) => {
@@ -53,12 +101,6 @@ const TeacherDashboard = () => {
         totalStudents: remainingStudents.length
       };
       setSelectedSchedule(updatedSchedule);
-      
-      // Update the schedules array
-      const updatedSchedules = schedules.map(schedule =>
-        schedule.id === selectedSchedule.id ? updatedSchedule : schedule
-      );
-      setSchedules(updatedSchedules);
     }
   };
 
@@ -66,7 +108,7 @@ const TeacherDashboard = () => {
     if (selectedSchedule) {
       const newStudent = {
         id: studentId,
-        name: `Student ${studentId}`, // In real app, fetch student name from API
+        name: `Student ${studentId}`,
         present: false
       };
       
@@ -77,12 +119,6 @@ const TeacherDashboard = () => {
       };
       
       setSelectedSchedule(updatedSchedule);
-      
-      // Update the schedules array
-      const updatedSchedules = schedules.map(schedule =>
-        schedule.id === selectedSchedule.id ? updatedSchedule : schedule
-      );
-      setSchedules(updatedSchedules);
     }
   };
 
@@ -96,14 +132,15 @@ const TeacherDashboard = () => {
               className="flex items-center text-gray-600 hover:text-gray-900"
             >
               <ArrowLeft className="h-5 w-5 mr-2" />
-              Back to Dashboard
+              Back to Schedule
             </button>
             <div className="flex space-x-3">
               <button
                 onClick={() => setShowEnrollModal(true)}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md"
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md flex items-center"
               >
-                + Enroll
+                <Users className="h-4 w-4 mr-2" />
+                Enroll Student
               </button>
               <button
                 onClick={handleRemoveSelected}
@@ -115,16 +152,17 @@ const TeacherDashboard = () => {
           </div>
 
           <div className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900">{selectedSchedule.topic}</h2>
-              <div className="flex items-center mt-2 text-gray-600">
+            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-6 rounded-lg">
+              <h2 className="text-2xl font-bold">{selectedSchedule.topic}</h2>
+              <div className="flex items-center mt-2">
                 <Clock className="h-5 w-5 mr-2" />
                 <span>{selectedSchedule.time}</span>
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                <Users className="h-5 w-5 mr-2" />
                 Students ({selectedSchedule.totalStudents})
               </h3>
               <div className="bg-gray-50 rounded-lg p-4">
@@ -159,26 +197,45 @@ const TeacherDashboard = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          <h1 className="text-3xl font-bold text-gray-900">Today's Schedule</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-900">Today's Schedule</h1>
+            <div className="text-sm text-gray-500">
+              {new Date().toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </div>
+          </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {schedules.map((schedule) => (
               <div
                 key={schedule.id}
                 onClick={() => setSelectedSchedule(schedule)}
-                className="bg-white rounded-lg shadow-md p-6 cursor-pointer transform transition-transform hover:scale-105"
+                className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-all hover:scale-105 hover:shadow-lg"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center text-gray-600">
-                    <Clock className="h-5 w-5 mr-2" />
+                <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-4 text-white">
+                  <div className="flex items-center text-sm mb-2">
+                    <Clock className="h-4 w-4 mr-2" />
                     <span>{schedule.time}</span>
                   </div>
-                  <span className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
-                    {schedule.totalStudents} Students
-                  </span>
+                  <h3 className="text-lg font-semibold flex items-center">
+                    <BookOpen className="h-5 w-5 mr-2" />
+                    {schedule.topic}
+                  </h3>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900">
-                  {schedule.topic}
-                </h3>
+                <div className="p-4 bg-white">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-gray-600">
+                      <Users className="h-4 w-4 mr-2" />
+                      <span className="text-sm">Total Students</span>
+                    </div>
+                    <span className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full">
+                      {schedule.totalStudents}
+                    </span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

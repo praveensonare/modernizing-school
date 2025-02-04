@@ -52,13 +52,7 @@ const Inbox = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
-        <button
-          onClick={() => navigate('/teacher')}
-          className="flex items-center text-gray-700 hover:text-gray-900 mb-6"
-        >
-          <ArrowLeft className="h-5 w-5 mr-2" />
-          Back to Dashboard
-        </button>
+
 
         <div className="bg-white shadow-lg rounded-lg overflow-hidden flex">
           <div className={`w-${selectedMessage ? '1/3' : 'full'} border-r bg-gray-50`}> 

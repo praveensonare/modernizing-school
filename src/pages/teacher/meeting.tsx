@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Video, MapPin, Clock, Calendar, X, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Video, MapPin, Clock, Calendar, X, AlertCircle, Users, Link as LinkIcon } from 'lucide-react';
 
 interface Meeting {
   id: string;
@@ -33,7 +33,7 @@ const MeetingPage = () => {
         password: 'dept2024'
       },
       description: 'Weekly sync-up with the Mathematics department to discuss curriculum progress.',
-      attendees: ['John Smith', 'Sarah Johnson', 'Mike Wilson']
+      attendees: ['John Smith', 'Sarah Johnson', 'Mike Wilson', 'Emma Davis', 'Alex Turner']
     },
     {
       id: '2',
@@ -43,7 +43,21 @@ const MeetingPage = () => {
       type: 'in-person',
       location: 'Room 204, Main Building',
       description: 'Individual meeting with Tommy\'s parents to discuss academic progress.',
-      attendees: ['Mr. Thompson', 'Mrs. Thompson']
+      attendees: ['Mr. Thompson', 'Mrs. Thompson', 'Principal Roberts']
+    },
+    {
+      id: '3',
+      title: 'School Board Meeting',
+      date: '2024-03-17',
+      time: '9:00 AM - 10:30 AM',
+      type: 'online',
+      link: 'https://meet.google.com/xyz-abcd-efg',
+      credentials: {
+        id: '987654321',
+        password: 'board2024'
+      },
+      description: 'Monthly school board meeting to discuss policy updates and upcoming events.',
+      attendees: ['Principal Roberts', 'Board Members', 'Department Heads']
     }
   ]);
 
@@ -51,7 +65,6 @@ const MeetingPage = () => {
   const [selectedMeeting, setSelectedMeeting] = useState<Meeting | null>(null);
 
   const handlePostponeMeeting = () => {
-    // Add API call to postpone meeting
     setShowPostponeModal(false);
   };
 
@@ -62,93 +75,114 @@ const MeetingPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <button
-          onClick={() => navigate('/teacher')}
-          className="flex items-center text-gray-600 hover:text-gray-900 mb-6"
-        >
-          <ArrowLeft className="h-5 w-5 mr-2" />
-          Back to Dashboard
-        </button>
+
 
         <div className="space-y-6">
-          <h1 className="text-3xl font-bold text-gray-900">Upcoming Meetings</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-900">Upcoming Meetings</h1>
+            <div className="text-sm text-gray-500">
+              {new Date().toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </div>
+          </div>
 
           <div className="grid gap-6 md:grid-cols-2">
             {meetings.map((meeting) => (
               <div
                 key={meeting.id}
-                className="bg-white rounded-lg shadow-md p-6"
+                className={`bg-white rounded-lg shadow-md overflow-hidden ${
+                  selectedMeeting?.id === meeting.id ? 'ring-2 ring-blue-500' : ''
+                }`}
               >
-                <div className="flex justify-between items-start mb-4">
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    {meeting.title}
-                  </h2>
-                  <div className="flex space-x-2">
-                    <button
-                      onClick={() => {
-                        setSelectedMeeting(meeting);
-                        setShowPostponeModal(true);
-                      }}
-                      className="px-3 py-1 text-sm text-yellow-700 bg-yellow-100 rounded-full hover:bg-yellow-200"
-                    >
-                      Postpone
-                    </button>
-                    <button
-                      onClick={() => handleCancelMeeting(meeting.id)}
-                      className="px-3 py-1 text-sm text-red-700 bg-red-100 rounded-full hover:bg-red-200"
-                    >
-                      Cancel
-                    </button>
+                <div className="bg-gradient-to-r from-purple-500 to-indigo-600 p-4 text-white">
+                  <h2 className="text-xl font-semibold mb-2">{meeting.title}</h2>
+                  <div className="flex items-center space-x-4 text-sm">
+                    <div className="flex items-center">
+                      <Calendar className="h-4 w-4 mr-1" />
+                      {meeting.date}
+                    </div>
+                    <div className="flex items-center">
+                      <Clock className="h-4 w-4 mr-1" />
+                      {meeting.time}
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="flex items-center text-gray-600">
-                    <Calendar className="h-5 w-5 mr-2" />
-                    <span>{meeting.date}</span>
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Clock className="h-5 w-5 mr-2" />
-                    <span>{meeting.time}</span>
-                  </div>
-                  {meeting.type === 'online' ? (
-                    <div className="space-y-2">
-                      <div className="flex items-center text-blue-600">
-                        <Video className="h-5 w-5 mr-2" />
-                        <a href={meeting.link} className="hover:underline">
-                          Join Meeting
-                        </a>
+                <div className="p-4">
+                  {selectedMeeting?.id === meeting.id ? (
+                    <div className="space-y-4">
+                      <p className="text-gray-600">{meeting.description}</p>
+                      
+                      {meeting.type === 'online' ? (
+                        <div className="space-y-2">
+                          <div className="flex items-center text-blue-600">
+                            <LinkIcon className="h-5 w-5 mr-2" />
+                            <a href={meeting.link} className="hover:underline" target="_blank" rel="noopener noreferrer">
+                              Join Meeting
+                            </a>
+                          </div>
+                          <div className="bg-gray-50 p-3 rounded-md">
+                            <p className="text-sm text-gray-600">
+                              Meeting ID: {meeting.credentials?.id}
+                              <br />
+                              Password: {meeting.credentials?.password}
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="flex items-center text-gray-600">
+                          <MapPin className="h-5 w-5 mr-2" />
+                          <span>{meeting.location}</span>
+                        </div>
+                      )}
+
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-500 mb-2 flex items-center">
+                          <Users className="h-4 w-4 mr-2" />
+                          Attendees
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {meeting.attendees.map((attendee, index) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600"
+                            >
+                              {attendee}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                      <div className="bg-gray-50 p-3 rounded-md">
-                        <p className="text-sm text-gray-600">
-                          Meeting ID: {meeting.credentials?.id}
-                          <br />
-                          Password: {meeting.credentials?.password}
-                        </p>
+
+                      <div className="flex justify-end space-x-3 pt-4">
+                        <button
+                          onClick={() => {
+                            setSelectedMeeting(meeting);
+                            setShowPostponeModal(true);
+                          }}
+                          className="px-4 py-2 text-sm text-yellow-700 bg-yellow-100 rounded-md hover:bg-yellow-200"
+                        >
+                          Postpone
+                        </button>
+                        <button
+                          onClick={() => handleCancelMeeting(meeting.id)}
+                          className="px-4 py-2 text-sm text-red-700 bg-red-100 rounded-md hover:bg-red-200"
+                        >
+                          Cancel
+                        </button>
                       </div>
                     </div>
                   ) : (
-                    <div className="flex items-center text-gray-600">
-                      <MapPin className="h-5 w-5 mr-2" />
-                      <span>{meeting.location}</span>
-                    </div>
+                    <button
+                      onClick={() => setSelectedMeeting(meeting)}
+                      className="w-full text-center text-blue-600 hover:text-blue-700 font-medium"
+                    >
+                      View Details
+                    </button>
                   )}
-                  <p className="text-gray-600">{meeting.description}</p>
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-500 mb-2">
-                      Attendees
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {meeting.attendees.map((attendee, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-600"
-                        >
-                          {attendee}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               </div>
             ))}
