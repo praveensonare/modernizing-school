@@ -253,83 +253,97 @@ export function AdminHome() {
 
       {/* Route Details Popup */}
       {selectedRoute && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-start z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end justify-start z-50">
           <div
             ref={popupRef}
-            className="bg-white rounded-t-lg sm:rounded-lg shadow-xl p-6 m-4 max-w-md w-full"
+            className="bg-white w-full max-w-md m-4 rounded-lg shadow-xl"
           >
-            <div className="flex justify-between items-start mb-4">
-              <div>
-                <h3 className="text-lg font-medium">
-                  Route {selectedRoute.routeNumber}
-                </h3>
-                <p className="text-sm text-gray-500">Bus: {selectedRoute.busNumber}</p>
-              </div>
+            <div className="p-4 border-b border-gray-200 flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Route Details</h2>
               <button
                 onClick={() => setSelectedRoute(null)}
-                className="p-1 hover:bg-gray-100 rounded-full"
+                className="p-2 hover:bg-gray-100 rounded-full"
               >
-                <X size={20} className="text-gray-500" />
+                <X size={20} />
               </button>
             </div>
 
-            <div className="space-y-4">
+            <div className="p-6 space-y-6">
               <div>
-                <p className="text-sm font-medium text-gray-700">Last Known Location</p>
-                <p className="text-sm text-gray-600">{selectedRoute.lastKnownLocation}</p>
-              </div>
-
-              <div>
-                <p className="text-sm font-medium text-gray-700">Students Onboard</p>
-                <p className="text-sm text-gray-600">
-                  {selectedRoute.registered} out of {selectedRoute.capacity}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-sm font-medium text-gray-700">Driver</p>
-                <p className="text-sm text-gray-600">{selectedRoute.driver.name}</p>
-                <div className="mt-1 flex gap-2">
-                  <a
-                    href={`tel:${selectedRoute.driver.phone}`}
-                    className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700"
-                  >
-                    <Phone size={16} />
-                    <span className="text-sm">Call</span>
-                  </a>
-                  <a
-                    href={`https://wa.me/${selectedRoute.driver.whatsapp.replace(/\+/g, '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-green-600 hover:text-green-700"
-                  >
-                    <MessageSquare size={16} />
-                    <span className="text-sm">WhatsApp</span>
-                  </a>
+                <h3 className="font-medium text-lg">Route Information</h3>
+                <div className="mt-2 space-y-2">
+                  <p className="text-gray-600">Route Number: {selectedRoute.routeNumber}</p>
+                  <p className="text-gray-600">Bus Number: {selectedRoute.busNumber}</p>
+                  <p className="text-gray-600">
+                    Students: {selectedRoute.registered}/{selectedRoute.capacity}
+                  </p>
+                  <p className="text-gray-600">Last Known Location: {selectedRoute.lastKnownLocation}</p>
                 </div>
               </div>
 
               <div>
-                <p className="text-sm font-medium text-gray-700">Assistant</p>
-                <p className="text-sm text-gray-600">{selectedRoute.assistant.name}</p>
-                <div className="mt-1 flex gap-2">
-                  <a
-                    href={`tel:${selectedRoute.assistant.phone}`}
-                    className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700"
-                  >
-                    <Phone size={16} />
-                    <span className="text-sm">Call</span>
-                  </a>
-                  <a
-                    href={`https://wa.me/${selectedRoute.assistant.whatsapp.replace(/\+/g, '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-green-600 hover:text-green-700"
-                  >
-                    <MessageSquare size={16} />
-                    <span className="text-sm">WhatsApp</span>
-                  </a>
+                <h3 className="font-medium text-lg">Driver</h3>
+                <div className="mt-2 space-y-2">
+                  <p className="text-gray-600">{selectedRoute.driver.name}</p>
+                  <div className="flex gap-4">
+                    <a
+                      href={`tel:${selectedRoute.driver.phone}`}
+                      className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
+                    >
+                      <Phone size={16} />
+                      <span>Call</span>
+                    </a>
+                    <a
+                      href={`https://wa.me/${selectedRoute.driver.whatsapp.replace(/\+/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-green-600 hover:text-green-700"
+                    >
+                      <MessageSquare size={16} />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
                 </div>
+              </div>
+
+              <div>
+                <h3 className="font-medium text-lg">Assistant</h3>
+                <div className="mt-2 space-y-2">
+                  <p className="text-gray-600">{selectedRoute.assistant.name}</p>
+                  <div className="flex gap-4">
+                    <a
+                      href={`tel:${selectedRoute.assistant.phone}`}
+                      className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
+                    >
+                      <Phone size={16} />
+                      <span>Call</span>
+                    </a>
+                    <a
+                      href={`https://wa.me/${selectedRoute.assistant.whatsapp.replace(/\+/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-green-600 hover:text-green-700"
+                    >
+                      <MessageSquare size={16} />
+                      <span>WhatsApp</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  onClick={() => navigate(`/admin/transport/route`)}
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                >
+                  Route
+                </button>
+                <button
+                  onClick={() => navigate(`/admin/transport/history`)}
+                  className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                >
+                  History
+                </button>
               </div>
             </div>
           </div>

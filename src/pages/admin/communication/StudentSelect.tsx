@@ -82,16 +82,13 @@ export function StudentSelect() {
     setSelectedStudents(newSelected);
   };
 
-  const selectAllInClass = (classId: string) => {
-    const classStudents = dummyClasses.find(c => c.id === classId)?.students || [];
-    const newSelected = new Set(selectedStudents);
-    classStudents.forEach(student => newSelected.add(student.id));
-    setSelectedStudents(newSelected);
-  };
-
   const selectAll = () => {
     const allStudents = dummyClasses.flatMap(c => c.students);
     setSelectedStudents(new Set(allStudents.map(s => s.id)));
+  };
+
+  const deselectAll = () => {
+    setSelectedStudents(new Set());
   };
 
   return (
@@ -99,12 +96,17 @@ export function StudentSelect() {
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-gray-900">Select Students</h1>
         <div className="mt-4 flex justify-between items-center">
-          <button
-            onClick={selectAll}
-            className="text-blue-600 hover:text-blue-700"
-          >
-            Select All
-          </button>
+          <div className="flex items-center gap-4">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={selectedStudents.size === dummyClasses.flatMap(c => c.students).length}
+                onChange={(e) => e.target.checked ? selectAll() : deselectAll()}
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              <span className="text-sm text-gray-700">Select All</span>
+            </label>
+          </div>
           <span className="text-gray-500">
             {selectedStudents.size} students selected
           </span>

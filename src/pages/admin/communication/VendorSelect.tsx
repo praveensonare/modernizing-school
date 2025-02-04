@@ -46,17 +46,26 @@ export function VendorSelect() {
     setSelectedVendors(new Set(allIds));
   };
 
+  const deselectAll = () => {
+    setSelectedVendors(new Set());
+  };
+
   return (
     <div className="max-w-6xl mx-auto">
       <div className="mb-8">
         <h1 className="text-2xl font-semibold text-gray-900">Select Vendors</h1>
         <div className="mt-4 flex justify-between items-center">
-          <button
-            onClick={selectAll}
-            className="text-blue-600 hover:text-blue-700"
-          >
-            Select All
-          </button>
+          <div className="flex items-center gap-4">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={selectedVendors.size === dummyVendors.length}
+                onChange={(e) => e.target.checked ? selectAll() : deselectAll()}
+                className="h-4 w-4 rounded border-gray-300"
+              />
+              <span className="text-sm text-gray-700">Select All</span>
+            </label>
+          </div>
           <span className="text-gray-500">
             {selectedVendors.size} vendors selected
           </span>

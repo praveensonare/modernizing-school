@@ -17,7 +17,7 @@ interface BusRoute {
     phone: string;
     whatsapp: string;
   };
-  assistant: {a
+  assistant: {
     name: string;
     phone: string;
     whatsapp: string;
