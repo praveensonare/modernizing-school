@@ -118,7 +118,7 @@ export function AdminHome() {
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: 'YOUR_GOOGLE_MAPS_API_KEY',
+      apiKey: 'AIzaSyAC4adI5_5XusAtEBJkleRlvVouqpWnAVw',
       version: 'weekly',
     });
 
