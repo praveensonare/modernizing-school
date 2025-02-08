@@ -9,6 +9,7 @@ interface Teacher {
   class: string;
 }
 
+
 const dummyTeachers: Teacher[] = [
   {
     id: '1',
@@ -22,8 +23,58 @@ const dummyTeachers: Teacher[] = [
     photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e',
     class: '9B',
   },
-  // Add more dummy teachers
+  {
+    id: '3',
+    name: 'Ava Thompson',
+    photo: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e',
+    class: '11C',
+  },
+  {
+    id: '4',
+    name: 'David Smith',
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
+    class: '10B',
+  },
+  {
+    id: '5',
+    name: 'Emily Brown',
+    photo: 'https://images.unsplash.com/photo-1521119989659-a83eee488004',
+    class: '12A',
+  },
+  {
+    id: '6',
+    name: 'James Wilson',
+    photo: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef',
+    class: '9A',
+  },
+  {
+    id: '7',
+    name: 'Sophia Martinez',
+    photo: 'https://images.unsplash.com/photo-1554151228-14d9def656e4',
+    class: '8B',
+  },
+  {
+    id: '8',
+    name: 'William Anderson',
+    photo: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce',
+    class: '11A',
+  },
+  {
+    id: '9',
+    name: 'Olivia Garcia',
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
+    class: '10C',
+  },
+  {
+    id: '10',
+    name: 'Liam Rodriguez',
+    photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2',
+    class: '12B',
+  },
 ];
+
+export default dummyTeachers;
+
 
 export function TeacherSelect() {
   const navigate = useNavigate();
@@ -70,11 +121,11 @@ export function TeacherSelect() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-3 h-96 overflow-auto ">
         {dummyTeachers.map((teacher) => (
           <div
             key={teacher.id}
-            className={`relative bg-white rounded-lg shadow-sm p-4 cursor-pointer
+            className={`relative bg-white rounded-lg shadow-sm p-4 m-4 cursor-pointer
               ${selectedTeachers.has(teacher.id) ? 'ring-2 ring-blue-500' : ''}`}
             onClick={() => toggleTeacher(teacher.id)}
           >
@@ -111,7 +162,6 @@ export function TeacherSelect() {
           <button
             onClick={() => navigate('/admin/comm/student')}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            disabled={selectedTeachers.size === 0}
           >
             Next
           </button>
