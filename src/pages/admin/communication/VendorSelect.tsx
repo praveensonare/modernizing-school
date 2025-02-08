@@ -10,6 +10,14 @@ interface Vendor {
   email: string;
 }
 
+interface Vendor {
+  id: string;
+  name: string;
+  photo: string;
+  whatsapp: string;
+  email: string;
+}
+
 const dummyVendors: Vendor[] = [
   {
     id: '1',
@@ -25,7 +33,65 @@ const dummyVendors: Vendor[] = [
     whatsapp: '+1234567891',
     email: 'info@xyzservices.com',
   },
+  {
+    id: '3',
+    name: 'PQR Tech',
+    photo: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d',
+    whatsapp: '+1234567892',
+    email: 'support@pqrtech.com',
+  },
+  {
+    id: '4',
+    name: 'Global Trading',
+    photo: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf',
+    whatsapp: '+1234567893',
+    email: 'sales@globaltrading.com',
+  },
+  {
+    id: '5',
+    name: 'Acme Corporation',
+    photo: 'https://images.unsplash.com/photo-1506702315536-dd8b83e2dcf9',
+    whatsapp: '+1234567894',
+    email: 'info@acmecorp.com',
+  },
+  {
+    id: '6',
+    name: 'Delta Electronics',
+    photo: 'https://images.unsplash.com/photo-1518770660439-4636190af475',
+    whatsapp: '+1234567895',
+    email: 'contact@deltaelectronics.com',
+  },
+  {
+    id: '7',
+    name: 'Sunrise Interiors',
+    photo: 'https://images.unsplash.com/photo-1505842465776-3d90c2b884ed',
+    whatsapp: '+1234567896',
+    email: 'hello@sunriseinteriors.com',
+  },
+  {
+    id: '8',
+    name: 'Mountain Equipment',
+    photo: 'https://images.unsplash.com/photo-1504198453319-5ce911bafcde',
+    whatsapp: '+1234567897',
+    email: 'info@mountainequipment.com',
+  },
+  {
+    id: '9',
+    name: 'Oceanic Logistics',
+    photo: 'https://images.unsplash.com/photo-1514474959185-80f71a38b89d',
+    whatsapp: '+1234567898',
+    email: 'support@oceaniclogistics.com',
+  },
+  {
+    id: '10',
+    name: 'Zenith Foods',
+    photo: 'https://images.unsplash.com/photo-1514516870922-6037c89d4c6d',
+    whatsapp: '+1234567899',
+    email: 'contact@zenithfoods.com',
+  },
 ];
+
+
 
 export function VendorSelect() {
   const navigate = useNavigate();
@@ -72,7 +138,7 @@ export function VendorSelect() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-3 gap-6 h-96 overflow-y-auto">
         {dummyVendors.map((vendor) => (
           <div
             key={vendor.id}
@@ -116,7 +182,6 @@ export function VendorSelect() {
           <button
             onClick={() => navigate('/admin/comm/review')}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-            disabled={selectedVendors.size === 0}
           >
             Next
           </button>
