@@ -15,6 +15,6 @@ teacher - dev8
 //updated admin, schoolbus, parent and teacher
 
 map enabled!!
-Adding feature List Below - 
+Adding feature List Below 
 
 
