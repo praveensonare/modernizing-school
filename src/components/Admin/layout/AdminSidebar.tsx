@@ -10,6 +10,7 @@ import {
   UserPlus,
   ChevronRight,
   ChevronLeft,
+  Inbox,
 } from 'lucide-react';
 import { cn } from '../../../lib/utils';
 
@@ -37,6 +38,11 @@ const navItems = [
     icon: UserPlus,
     label: 'Add Student',
     path: '/admin/add-student',
+  },
+  {
+    icon: Inbox,
+    label: 'Inbox',
+    path: '/admin/inbox',
   },
 ];
 
