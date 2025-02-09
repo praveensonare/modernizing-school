@@ -28,6 +28,7 @@ import { AddStudent } from "../pages/admin/student/AddStudent";
 // Teacher & Admission
 import { Teacher } from "../pages/admin/teacher/Teacher";
 import { Admission } from "../pages/admin/admission/Admission";
+import  Inbox  from "../pages/admin/inbox/Inbox";
 
 const AdminRoutes: React.FC = () => {
   return (
@@ -58,6 +59,7 @@ const AdminRoutes: React.FC = () => {
           {/* Teacher & Admission */}
           <Route path="teacher" element={<Teacher />} />
           <Route path="admission" element={<Admission />} />
+          <Route path="inbox" element={<Inbox />} />
         </Route>
       </Routes>
     </ProtectedRoute>
