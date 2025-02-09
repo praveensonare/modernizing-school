@@ -29,6 +29,8 @@ import { AddStudent } from "../pages/admin/student/AddStudent";
 import { Teacher } from "../pages/admin/teacher/Teacher";
 import { Admission } from "../pages/admin/admission/Admission";
 import  Inbox  from "../pages/admin/inbox/Inbox";
+import  {MyProfile}  from "../pages/admin/MyProfile";
+
 
 const AdminRoutes: React.FC = () => {
   return (
@@ -60,6 +62,7 @@ const AdminRoutes: React.FC = () => {
           <Route path="teacher" element={<Teacher />} />
           <Route path="admission" element={<Admission />} />
           <Route path="inbox" element={<Inbox />} />
+          <Route path="myProfile" element={<MyProfile />} />
         </Route>
       </Routes>
     </ProtectedRoute>
