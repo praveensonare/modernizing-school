@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Phone, MessageSquare, Clock, Pencil, X, Check, Bus } from 'lucide-react';
 import Header from './../../components/SchoolBus/Header';
 import Footer from './../../components/SchoolBus/Footer';
+import { useAuth } from './../../store/useAuth';
 
 interface Staff {
   id: number;
@@ -18,10 +19,11 @@ interface Route {
 }
 
 export default function MyAccount() {
+  const { user } = useAuth();
   const [editingStaffId, setEditingStaffId] = useState<number | null>(null);
   const [editedStaff, setEditedStaff] = useState<Staff | null>(null);
   const schoolName = "ABC School";
-  const userEmail = "admin@abcschool.com";
+  const userEmail = user?.email;
   const routeNumber = "R-123";
   const busNumber = "B-456";
 

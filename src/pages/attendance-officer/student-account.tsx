@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Attendance-officer/Header';
 import Footer from '../../components/Attendance-officer/Footer';
+import { useAuth} from "../../store/useAuth"
 
 import { Save } from 'lucide-react';
 
@@ -11,11 +12,12 @@ type UserProfile = {
 };
 
 export default function Profile() {
+  const { user } = useAuth();
   const [profile, setProfile] = useState<UserProfile>(() => {
     const saved = localStorage.getItem('userProfile');
     return saved ? JSON.parse(saved) : {
-      name: 'John Smith',
-      email: 'john.smith@school.com',
+      name: user?.displayName||'',
+      email:  user?.email || '',
       phone: '+1234567890'
     };
   });

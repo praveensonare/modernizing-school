@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Home, User, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
-// import { useAuth } from '../../store/useAuth';
+import { useAuth } from '../../store/useAuth';
 
 export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  // const { user } = useAuth();
+   const { user } = useAuth();
 
 
   const handleLogout = () => {
@@ -39,7 +39,7 @@ export default function Header() {
             className="flex items-center space-x-2 bg-gray-700 rounded-full pl-1 pr-3 py-1 hover:bg-gray-600 transition"
           >
             <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
-              <User className="h-6 w-6 text-white" />
+              <img src={user?.photoURL} className="h-9 w-9 text-white rounded-2xl "/>
             </div>
             <ChevronDown className={`h-5 w-5 text-white transition-transform duration-200 ${isDropdownOpen ? 'transform rotate-180' : ''}`} />
           </button>

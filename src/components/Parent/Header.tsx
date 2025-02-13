@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Home, ChevronDown, LogOut, User, Bus, History, Inbox, UserPlus } from 'lucide-react';
+import { useAuth } from '../../store/useAuth';
 
 interface Child {
   id: string;
@@ -10,6 +11,7 @@ interface Child {
 export default function Header() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [selectedChild, setSelectedChild] = useState<Child | null>(null);
+  const { user } = useAuth();
   const [children] = useState<Child[]>([
     { id: '1', name: 'John Doe' },
     { id: '2', name: 'Jane Doe' }
@@ -64,7 +66,7 @@ export default function Header() {
           className="flex items-center space-x-2 hover:text-gray-300"
         >
           <img
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+            src={user?.photoURL}
             alt="Profile"
             className="w-8 h-8 rounded-full"
           />
