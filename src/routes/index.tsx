@@ -8,6 +8,7 @@ import AttendanceOfficerRoutes from "./AttendanceOfficerRoutes";
 import SchoolBusRoutes from "./SchoolBusRoutes";
 import AdminRoutes from "./AdminRoutes";
 import TeacherRoutes from "./TeacherRoutes";
+import NotFound from "../components/NotFound";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -33,6 +34,7 @@ const AppRoutes: React.FC = () => {
 
 
       
+        <Route path="*" element={<NotFound />} />
 
 
       {/* Redirect root to login */}
