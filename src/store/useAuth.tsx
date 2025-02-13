@@ -19,7 +19,7 @@ export interface User {
   email: string;
   avatar?: string;
   
-  displayName?: string;
+  name?: string;
   type: UserType;
   photoURL?: string;
 }

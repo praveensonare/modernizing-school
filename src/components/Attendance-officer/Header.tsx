@@ -10,7 +10,7 @@ export default function Header() {
 
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem("authToken");
     window.location.href = '/login';
   };
 
@@ -39,7 +39,7 @@ export default function Header() {
             className="flex items-center space-x-2 bg-gray-700 rounded-full pl-1 pr-3 py-1 hover:bg-gray-600 transition"
           >
             <div className="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center">
-              <img src={user?.photoURL} className="h-9 w-9 text-white rounded-2xl "/>
+              <img src={user?.avatar} className="h-9 w-9 text-white rounded-2xl "/>
             </div>
             <ChevronDown className={`h-5 w-5 text-white transition-transform duration-200 ${isDropdownOpen ? 'transform rotate-180' : ''}`} />
           </button>

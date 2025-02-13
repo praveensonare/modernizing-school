@@ -31,7 +31,7 @@ export function MyProfile() {
   const navigate = useNavigate();
   const { user } = useAuth(); 
 
-  const [fullName, setFullName] = useState(user?.displayName || '');
+  const [fullName, setFullName] = useState(user?.name);
   const [mobile, setMobile] = useState('+1 234-567-8900');
   const [currentPlan] = useState('Basic');
   const [expiryDate] = useState('2024-12-31');
@@ -48,8 +48,8 @@ export function MyProfile() {
           <h2 className="text-lg font-medium mb-4">Personal Information</h2>
           <div className="space-y-4">
             <div className="flex items-center gap-4">
-              {user?.photoURL && (
-                <img src={user.photoURL} alt="Profile" className="w-16 h-16 rounded-full" />
+              {user?.avatar && (
+                <img src={user.avatar} alt="Profile" className="w-16 h-16 rounded-full" />
               )}
               <div>
                 <label className="block text-sm font-medium text-gray-700">Full Name</label>

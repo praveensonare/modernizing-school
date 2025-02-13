@@ -20,12 +20,10 @@ export function AdminHeader() {
   }, []);
 
   const handleLogout = () => {
-
-    
-    localStorage.clear();
+    localStorage.removeItem("authToken");
 
     window.location.href = '/login';
-  };
+};
 
   return (
     <header className="h-16 bg-gray-900 border-b border-gray-800 px-6 flex items-center justify-between">
@@ -47,7 +45,7 @@ export function AdminHeader() {
           className="flex items-center gap-2"
         >
           <img
-            src={user?.photoURL }
+            src={user?.avatar }
             alt="Profile"
             className="h-10 w-10 rounded-full object-cover border-2 border-white hover:border-blue-400 transition-colors"
             />

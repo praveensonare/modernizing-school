@@ -67,6 +67,7 @@ export const Login: React.FC = () => {
           email: user.email!,
           avatar: user.photoURL || "",
           type: selectedType,
+          name: user.displayName || "Unknown User"
         }));
         localStorage.setItem("authToken", token);
   
@@ -75,6 +76,7 @@ export const Login: React.FC = () => {
           email: user.email!,
           avatar: user.photoURL || "",
           type: selectedType,
+          name: user.displayName || "Unknown User"
         });
   
         setIsAuthenticated(true);

@@ -37,7 +37,7 @@ export default function Header() {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem("authToken");
     window.location.href = '/login';
   };
 
@@ -66,7 +66,7 @@ export default function Header() {
           className="flex items-center space-x-2 hover:text-gray-300"
         >
           <img
-            src={user?.photoURL}
+            src={user?.avatar}
             alt="Profile"
             className="w-8 h-8 rounded-full"
           />

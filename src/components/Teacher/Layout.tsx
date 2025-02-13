@@ -25,7 +25,7 @@ const Layout = ({ children }: LayoutProps) => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.clear();
+    localStorage.removeItem("authToken");
     navigate('/login');
   };
 
@@ -59,7 +59,7 @@ const Layout = ({ children }: LayoutProps) => {
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
             >
               <img
-                src={user?.photoURL}
+                src={user?.avatar}
                 alt="Profile"
                 className="h-10 w-10 rounded-full object-cover border-2 border-white hover:border-blue-400 transition-colors"
               />

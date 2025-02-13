@@ -19,7 +19,7 @@ const MyProfile = () => {
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<TeacherProfile>({
-    name: user?.displayName || "",
+    name: user?.name || "",
     email: user?.email || "",
     phone: '+1 (555) 123-4567',
     address: '123 Education Street, Teaching City, TC 12345',
@@ -39,7 +39,7 @@ const MyProfile = () => {
     if (user) {
       setProfile((prev) => ({
         ...prev,
-        name: user.displayName || "",
+        name: user.name || "",
         email: user.email || "",
       }));
     }
@@ -65,7 +65,7 @@ const MyProfile = () => {
           <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600">
             <div className="absolute -bottom-16 left-6">
               <img
-                src={user?.photoURL}
+                src={user?.avatar}
                 alt="Profile"
                 className="h-32 w-32 rounded-full border-4 border-white object-cover"
               />

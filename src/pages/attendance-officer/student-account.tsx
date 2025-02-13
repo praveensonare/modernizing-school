@@ -16,7 +16,7 @@ export default function Profile() {
   const [profile, setProfile] = useState<UserProfile>(() => {
     const saved = localStorage.getItem('userProfile');
     return saved ? JSON.parse(saved) : {
-      name: user?.displayName||'',
+      name: user?.name||'',
       email:  user?.email || '',
       phone: '+1234567890'
     };
