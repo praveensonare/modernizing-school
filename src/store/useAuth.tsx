@@ -41,17 +41,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isauthenticated, setIsAuthenticated] = useState<boolean>(
     !!localStorage.getItem("authToken")
   );
+
   const [user, setUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem("user");
-
-    
-    return storedUser ? JSON.parse(storedUser) : null;
+    try {
+      const storedUser = localStorage.getItem("user");
+      return storedUser ? JSON.parse(storedUser) : null;
+    } catch (error) {
+      console.error("Error parsing user data:", error);
+      return null;
+    }
   });
-
-  useEffect(() => {
-    
-  }, [isauthenticated]);
-
+  
+ 
   const logout = () => {
     localStorage.clear();
     setIsAuthenticated(false);

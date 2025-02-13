@@ -56,34 +56,28 @@ export const Login: React.FC = () => {
     try {
       setLoading(true);
       const result = await signInWithGooglePopup();
-      
       const user = result.user;
       
-
-      
-      
-  
       if (user) {
-        const user = result.user;
         const token = await user.getIdToken();
-
         
-        localStorage.setItem("user", JSON.stringify(user));
+        // Save to localStorage
+        localStorage.setItem("user", JSON.stringify({
+          uid: user.uid,
+          email: user.email!,
+          avatar: user.photoURL || "",
+          type: selectedType,
+        }));
         localStorage.setItem("authToken", token);
   
-       
         setUser({
           uid: user.uid,
           email: user.email!,
-          avatar: user.photoURL || "", 
+          avatar: user.photoURL || "",
           type: selectedType,
         });
-        
-        console.log("User", user);
-        
-        setIsAuthenticated(true);
   
-        console.log("Login Successful. Redirecting...");
+        setIsAuthenticated(true);
         navigate(`/${selectedType}`);
       } else {
         console.log("User object is undefined!");
@@ -94,6 +88,7 @@ export const Login: React.FC = () => {
       setLoading(false);
     }
   };
+  
   
   const isDesktop = window.innerWidth >= 768;
   const userTypes = isDesktop ? ['parent', 'admin', 'teacher'] : ['parent', 'teacher', 'attendance-officer', 'school-bus'];
