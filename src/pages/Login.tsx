@@ -73,8 +73,10 @@ export const Login: React.FC = () => {
         setUser({
           uid: user.uid,
           email: user.email!,
+          avatar: user.photoURL || "", 
           type: selectedType,
         });
+        
         setIsAuthenticated(true);
   
         console.log("Login Successful. Redirecting...");
