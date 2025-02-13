@@ -59,6 +59,8 @@ export const Login: React.FC = () => {
       
       const user = result.user;
       
+
+      
       
   
       if (user) {
@@ -76,6 +78,7 @@ export const Login: React.FC = () => {
           avatar: user.photoURL || "", 
           type: selectedType,
         });
+        
         
         setIsAuthenticated(true);
   
