@@ -34,7 +34,7 @@ export function AdminHeader() {
           <Home size={24} />
         </Link>
         <Link
-          to="https://school-website.com"
+          to="https://tap2share.co"
           className="text-lg font-semibold text-gray-100 hover:text-blue-300"
         >
           International School
@@ -47,10 +47,10 @@ export function AdminHeader() {
           className="flex items-center gap-2"
         >
           <img
-            src={user?.avatar || 'https://via.placeholder.com/40'}
+            src={user?.photoURL }
             alt="Profile"
-            className="w-10 h-10 rounded-full"
-          />
+            className="h-10 w-10 rounded-full object-cover border-2 border-white hover:border-blue-400 transition-colors"
+            />
           <ChevronDown size={16} className="text-gray-300" />
         </button>
 

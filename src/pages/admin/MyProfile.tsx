@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Phone, Mail, CreditCard, Calendar } from 'lucide-react';
+import { useAuth } from '../../store/useAuth'; // Import useAuth
 
 interface SubscriptionPlan {
   duration: string;
@@ -28,8 +29,9 @@ const subscriptionPlans: SubscriptionPlan[] = [
 
 export function MyProfile() {
   const navigate = useNavigate();
-  const [fullName, setFullName] = useState('John Doe');
-  const [email] = useState('john.doe@example.com');
+  const { user } = useAuth(); 
+
+  const [fullName, setFullName] = useState(user?.displayName || '');
   const [mobile, setMobile] = useState('+1 234-567-8900');
   const [currentPlan] = useState('Basic');
   const [expiryDate] = useState('2024-12-31');
@@ -45,20 +47,25 @@ export function MyProfile() {
         <div className="bg-white rounded-lg shadow-sm p-6">
           <h2 className="text-lg font-medium mb-4">Personal Information</h2>
           <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Full Name</label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
+            <div className="flex items-center gap-4">
+              {user?.photoURL && (
+                <img src={user.photoURL} alt="Profile" className="w-16 h-16 rounded-full" />
+              )}
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Full Name</label>
+                <input
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                />
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Email</label>
               <div className="mt-1 flex items-center gap-2 text-gray-600">
                 <Mail size={20} />
-                <span>{email}</span>
+                <span>{user?.email || 'N/A'}</span>
               </div>
             </div>
             <div>

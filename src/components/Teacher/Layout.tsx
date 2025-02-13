@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Home, ChevronDown, LogOut } from 'lucide-react';
+import { useAuth } from '../../store/useAuth';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,6 +9,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -57,7 +59,7 @@ const Layout = ({ children }: LayoutProps) => {
               onClick={() => setShowProfileDropdown(!showProfileDropdown)}
             >
               <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+                src={user?.photoURL}
                 alt="Profile"
                 className="h-10 w-10 rounded-full object-cover border-2 border-white hover:border-blue-400 transition-colors"
               />

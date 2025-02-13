@@ -79,6 +79,7 @@ export const Login: React.FC = () => {
           type: selectedType,
         });
         
+        console.log("User", user);
         
         setIsAuthenticated(true);
   

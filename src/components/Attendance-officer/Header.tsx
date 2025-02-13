@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Home, User, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+// import { useAuth } from '../../store/useAuth';
 
 export default function Header() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  // const { user } = useAuth();
 
 
   const handleLogout = () => {

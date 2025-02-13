@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Edit2, Save } from 'lucide-react';
+import { useAuth } from './../../store/useAuth';
 
 interface TeacherProfile {
   name: string;
@@ -15,10 +16,11 @@ interface TeacherProfile {
 
 const MyProfile = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [profile, setProfile] = useState<TeacherProfile>({
-    name: 'Sarah Johnson',
-    email: 'sarah.johnson@school.com',
+    name: user?.displayName || "",
+    email: user?.email || "",
     phone: '+1 (555) 123-4567',
     address: '123 Education Street, Teaching City, TC 12345',
     schedule: [
@@ -30,13 +32,22 @@ const MyProfile = () => {
         day: 'Tuesday',
         slots: ['9:00 AM - 10:30 AM', '2:00 PM - 3:30 PM']
       },
-      // Add more days as needed
     ]
   });
 
+  useEffect(() => {
+    if (user) {
+      setProfile((prev) => ({
+        ...prev,
+        name: user.displayName || "",
+        email: user.email || "",
+      }));
+    }
+  }, [user]);
+
+
   const handleSave = () => {
     setIsEditing(false);
-    // Add API call to save profile changes
   };
 
   return (
@@ -54,7 +65,7 @@ const MyProfile = () => {
           <div className="relative h-48 bg-gradient-to-r from-blue-500 to-purple-600">
             <div className="absolute -bottom-16 left-6">
               <img
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150"
+                src={user?.photoURL}
                 alt="Profile"
                 className="h-32 w-32 rounded-full border-4 border-white object-cover"
               />
