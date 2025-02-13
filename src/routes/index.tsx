@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Login } from "../pages/Login";
+import  Verify from "../pages/Verify";
 
 import ParentRoutes from "./ParentRoutes";
 import AttendanceOfficerRoutes from "./AttendanceOfficerRoutes";
@@ -12,6 +13,8 @@ const AppRoutes: React.FC = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/verify" element={<Verify />} />
+
 
       {/* Parent Routes */}
       <Route path="/parent/*" element={<ParentRoutes />} />

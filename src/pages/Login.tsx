@@ -20,7 +20,7 @@ export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
   const [emailSent, setEmailSent] = useState<boolean>(false);
-  const [emailError, setEmailError] = useState<string>('');  // New state for email error
+  const [emailError, setEmailError] = useState<string>('');  
   const navigate = useNavigate();
   const { setUser , setIsAuthenticated } = useAuth();
 
@@ -28,19 +28,19 @@ export const Login: React.FC = () => {
     event.preventDefault();
   
     if (!email.trim()) {
-      setEmailError('Please enter your email');  // Set the error message
+      setEmailError('Please enter your email');  
       return;
     }
   
-    const actionCodeSettings = {
-      // url: `https://school.tap2share.co/signin-confirm?type=${type}`,
-      url: `https://school.tap2share.co/${type}`,
+   const actionCodeSettings = {
+      url: `https://school.tap2share.co/{type}`, 
       handleCodeInApp: true,
     };
   
     try {
       setLoading(true);
       await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+      alert("Verification link sent to your email!");
       window.localStorage.setItem("emailForSignIn", email);
       window.localStorage.setItem("login type", type);
       setEmailSent(true);
