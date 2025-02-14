@@ -17,5 +17,6 @@ teacher - dev8
 map enabled!!
 Adding feature List Below 
 inbox implemented
+profile picture and user name added
 
 
