@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Bus, Plus, X, Phone, MessageSquare } from 'lucide-react';
 import { cn } from '../../../lib/utils';
 import { Loader } from '@googlemaps/js-api-loader';
+const GOOGLE_API = import.meta.env.VITE_GOOGLE_API_KEY;
+
 
 interface BusRoute {
   id: string;
@@ -123,16 +125,22 @@ export function Transport() {
   const [selectedRoute, setSelectedRoute] = useState<BusRoute | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.Marker | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<{lat: number, lng: number} | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [movingMarker, setMovingMarker] = useState<google.maps.Marker | null>(null);
   const popupRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<HTMLDivElement>(null);
+  const [clickedPoints, setClickedPoints] = useState<{ lat: number; lng: number }[]>([]);
+  const [markers, setMarkers] = useState<google.maps.Marker[]>([]);
+  const [dirService, setDirService] = useState<google.maps.DirectionsService | null>(null);
+  const [dirRenderer, setDirRenderer] = useState<google.maps.DirectionsRenderer | null>(null);
+  const [routePath, setRoutePath] = useState<google.maps.LatLng[]>([]);
+  const [currentPathIndex, setCurrentPathIndex] = useState(0);
 
   useEffect(() => {
     const loader = new Loader({
-      apiKey: 'AIzaSyAC4adI5_5XusAtEBJkleRlvVouqpWnAVw',
+      apiKey: GOOGLE_API,
       version: 'weekly',
     });
-
     loader.load().then(() => {
       if (mapRef.current) {
         const newMap = new google.maps.Map(mapRef.current, {
@@ -140,29 +148,64 @@ export function Transport() {
           zoom: 12,
         });
         setMap(newMap);
-
+        const ds = new google.maps.DirectionsService();
+        const dr = new google.maps.DirectionsRenderer();
+        dr.setMap(newMap);
+        setDirService(ds);
+        setDirRenderer(dr);
         newMap.addListener('click', (e: google.maps.MapMouseEvent) => {
-          const latLng = e.latLng;
-          if (latLng) {
-            setSelectedLocation({
-              lat: latLng.lat(),
-              lng: latLng.lng(),
-            });
-            
-            if (marker) {
-              marker.setMap(null);
-            }
-            
-            const newMarker = new google.maps.Marker({
-              position: latLng,
-              map: newMap,
-            });
-            setMarker(newMarker);
-          }
+          if (!e.latLng) return;
+          const point = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+          setSelectedLocation(point);
+          const newMarker = new google.maps.Marker({
+            position: point,
+            map: newMap,
+          });
+          setMarkers((prev) => [...prev, newMarker]);
+          setClickedPoints((prev) => [...prev, point]);
         });
       }
     });
   }, [showNewRouteForm]);
+
+  useEffect(() => {
+    if (clickedPoints.length >= 2 && dirService && dirRenderer && map) {
+      const origin = clickedPoints[0];
+      const destination = clickedPoints[clickedPoints.length - 1];
+      const waypoints = clickedPoints.slice(1, clickedPoints.length - 1).map((point) => ({
+        location: point,
+        stopover: true,
+      }));
+      const request: google.maps.DirectionsRequest = {
+        origin,
+        destination,
+        waypoints,
+        travelMode: google.maps.TravelMode.DRIVING,
+      };
+      dirService.route(request, (result, status) => {
+        if (status === 'OK' && result) {
+          dirRenderer.setDirections(result);
+          const route = result.routes[0];
+          if (route && route.overview_path) {
+            setRoutePath(route.overview_path);
+            setCurrentPathIndex(0);
+            if (movingMarker) {
+              movingMarker.setMap(null);
+            }
+            const newMarker = new google.maps.Marker({
+              position: route.overview_path[0],
+              map: map,
+              icon: {
+                url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                scaledSize: new google.maps.Size(32, 32),
+              },
+            });
+            setMovingMarker(newMarker);
+          }
+        }
+      });
+    }
+  }, [clickedPoints, dirService, dirRenderer, map]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -170,7 +213,6 @@ export function Transport() {
         setSelectedRoute(null);
       }
     }
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
@@ -180,8 +222,7 @@ export function Transport() {
       alert('Please select a location on the map first');
       return;
     }
-
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       stations: [
         ...prev.stations,
@@ -193,8 +234,6 @@ export function Transport() {
         },
       ],
     }));
-
-    // Reset selection
     setSelectedLocation(null);
     if (marker) {
       marker.setMap(null);
@@ -203,7 +242,7 @@ export function Transport() {
   };
 
   const handleRemoveStation = (index: number) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       stations: prev.stations.filter((_, i) => i !== index),
     }));
@@ -211,13 +250,22 @@ export function Transport() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically make an API call to save the new route
     setShowNewRouteForm(false);
     setFormData(initialFormState);
   };
 
   const handleRouteClick = (route: BusRoute) => {
     setSelectedRoute(route);
+  };
+
+  const handleUserTravel = () => {
+    if (routePath.length > 0 && currentPathIndex < routePath.length - 1) {
+      const nextIndex = currentPathIndex + 1;
+      setCurrentPathIndex(nextIndex);
+      if (movingMarker) {
+        movingMarker.setPosition(routePath[nextIndex]);
+      }
+    }
   };
 
   return (
@@ -232,7 +280,6 @@ export function Transport() {
           New Route
         </button>
       </div>
-
       <div className="grid grid-cols-3 gap-6">
         {routes.map((route) => (
           <div
@@ -271,24 +318,15 @@ export function Transport() {
           </div>
         ))}
       </div>
-
-      {/* Route Details Popup */}
       {selectedRoute && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-end z-50">
-          <div
-            ref={popupRef}
-            className="bg-white h-full w-full max-w-md overflow-y-auto"
-          >
+          <div ref={popupRef} className="bg-white h-full w-full max-w-md overflow-y-auto">
             <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
               <h2 className="text-xl font-semibold">Route Details</h2>
-              <button
-                onClick={() => setSelectedRoute(null)}
-                className="p-2 hover:bg-gray-100 rounded-full"
-              >
+              <button onClick={() => setSelectedRoute(null)} className="p-2 hover:bg-gray-100 rounded-full">
                 <X size={20} />
               </button>
             </div>
-
             <div className="p-6 space-y-6">
               <div>
                 <h3 className="font-medium text-lg">Route Information</h3>
@@ -300,7 +338,6 @@ export function Transport() {
                   </p>
                 </div>
               </div>
-
               <div>
                 <h3 className="font-medium text-lg">Driver</h3>
                 <div className="mt-2 space-y-2">
@@ -325,7 +362,6 @@ export function Transport() {
                   </div>
                 </div>
               </div>
-
               <div>
                 <h3 className="font-medium text-lg">Assistant</h3>
                 <div className="mt-2 space-y-2">
@@ -350,7 +386,6 @@ export function Transport() {
                   </div>
                 </div>
               </div>
-
               <div className="flex gap-4">
                 <button
                   onClick={() => navigate(`/admin/transport/route`)}
@@ -369,83 +404,58 @@ export function Transport() {
           </div>
         </div>
       )}
-
-      {/* New Route Form Modal */}
       {showNewRouteForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-semibold">Create New Route</h2>
-              <button
-                onClick={() => setShowNewRouteForm(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
+              <button onClick={() => setShowNewRouteForm(false)} className="text-gray-500 hover:text-gray-700">
                 <X size={20} />
               </button>
             </div>
-
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Driver Name
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700">Driver Name</label>
                     <input
                       type="text"
                       value={formData.driverName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, driverName: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, driverName: e.target.value })}
                       className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Driver Contact
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700">Driver Contact</label>
                     <input
                       type="tel"
                       value={formData.driverContact}
-                      onChange={(e) =>
-                        setFormData({ ...formData, driverContact: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, driverContact: e.target.value })}
                       className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Driver WhatsApp
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700">Driver WhatsApp</label>
                     <input
                       type="tel"
                       value={formData.driverWhatsapp}
-                      onChange={(e) =>
-                        setFormData({ ...formData, driverWhatsapp: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, driverWhatsapp: e.target.value })}
                       className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                 </div>
-
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Assistant Name
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700">Assistant Name</label>
                     <input
                       type="text"
                       value={formData.assistantName}
-                      onChange={(e) =>
-                        setFormData({ ...formData, assistantName: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, assistantName: e.target.value })}
                       className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Assistant Contact
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700">Assistant Contact</label>
                     <input
                       type="tel"
                       value={formData.assistantContact}
@@ -459,9 +469,7 @@ export function Transport() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      Assistant WhatsApp
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700">Assistant WhatsApp</label>
                     <input
                       type="tel"
                       value={formData.assistantWhatsapp}
@@ -476,38 +484,27 @@ export function Transport() {
                   </div>
                 </div>
               </div>
-
               <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Route Number
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700">Route Number</label>
                   <input
                     type="text"
                     value={formData.routeNumber}
-                    onChange={(e) =>
-                      setFormData({ ...formData, routeNumber: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, routeNumber: e.target.value })}
                     className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Bus Number
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700">Bus Number</label>
                   <input
                     type="text"
                     value={formData.busNumber}
-                    onChange={(e) =>
-                      setFormData({ ...formData, busNumber: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, busNumber: e.target.value })}
                     className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Capacity
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700">Capacity</label>
                   <input
                     type="number"
                     value={formData.capacity}
@@ -521,20 +518,15 @@ export function Transport() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Bus Photo URL
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700">Bus Photo URL</label>
                   <input
                     type="text"
                     value={formData.photo}
-                    onChange={(e) =>
-                      setFormData({ ...formData, photo: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
                     className="mt-1 block w-full rounded-md border-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   />
                 </div>
               </div>
-
               <div>
                 <div className="flex justify-between items-center mb-4">
                   <h3 className="text-lg font-medium">Stations</h3>
@@ -547,20 +539,16 @@ export function Transport() {
                     Add Station
                   </button>
                 </div>
-
                 <div className="mb-4 h-[400px]">
                   <div ref={mapRef} className="w-full h-full rounded-lg"></div>
                 </div>
-
                 {formData.stations.map((station, index) => (
                   <div
                     key={index}
                     className="grid grid-cols-5 gap-4 mb-4 items-start bg-gray-50 p-4 rounded-lg"
                   >
                     <div className="col-span-2">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Station Name
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700">Station Name</label>
                       <input
                         type="text"
                         value={station.name}
@@ -573,9 +561,7 @@ export function Transport() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Pickup Time
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700">Pickup Time</label>
                       <input
                         type="time"
                         value={station.pickupTime}
@@ -588,9 +574,7 @@ export function Transport() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">
-                        Drop-off Time
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700">Drop-off Time</label>
                       <input
                         type="time"
                         value={station.dropoffTime}
@@ -617,7 +601,6 @@ export function Transport() {
                   </div>
                 ))}
               </div>
-
               <div className="flex justify-end gap-4">
                 <button
                   type="button"
@@ -637,6 +620,18 @@ export function Transport() {
           </div>
         </div>
       )}
+      {routePath.length > 0 && (
+        <div className="fixed bottom-4 right-4">
+          <button
+            onClick={handleUserTravel}
+            className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+          >
+            Move Bus
+          </button>
+        </div>
+      )}
     </div>
   );
 }
+
+export default Transport;

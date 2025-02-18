@@ -1,5 +1,7 @@
 import React from 'react';
 import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+const GOOGLE_API = import.meta.env.VITE_GOOGLE_API_KEY;
+
 
 interface ContainerStyle {
   width: string;
@@ -37,10 +39,9 @@ const GoogleMapView: React.FC<GoogleMapViewProps> = ({
 }) => {
   const { isLoaded } = useJsApiLoader({
     id: 'dab5d4e7c25716fb',
-    googleMapsApiKey: "AIzaSyAC4adI5_5XusAtEBJkleRlvVouqpWnAVw"
+    googleMapsApiKey: GOOGLE_API
   });
 
-  // If centerLocation is not provided, use the first location in the array
   const center: MapCenter = {
     lat: centerLocation?.latitude || locations[0]?.latitude || 0,
     lng: centerLocation?.longitude || locations[0]?.longitude || 0
@@ -48,7 +49,7 @@ const GoogleMapView: React.FC<GoogleMapViewProps> = ({
 
   const [map, setMap] = React.useState<google.maps.Map | null>(null);
 
-  // Function to fit bounds to include all markers
+ 
   const fitBoundsToMarkers = React.useCallback((map: google.maps.Map) => {
     if (locations.length > 1) {
       const bounds = new google.maps.LatLngBounds();
