@@ -59,7 +59,7 @@ export const Login: React.FC = () => {
       const user = result.user;
       
       if (user) {
-        const token = await user.getIdToken();
+        const token = await user.getIdToken(true);
         
         // Save to localStorage
         localStorage.setItem("user", JSON.stringify({
