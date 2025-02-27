@@ -11,12 +11,12 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "fir
 const firebaseConfig = {
   apiKey: "AIzaSyDVyovmUsGl5u7ovIoJHSbq6TP-zWUCiKU",
   authDomain: "instashare-b328c.firebaseapp.com",
+  databaseURL: "https://instashare-b328c-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "instashare-b328c",
   storageBucket: "instashare-b328c.appspot.com",
   messagingSenderId: "552445805110",
   appId: "1:552445805110:web:833842421ea3ac1b8ece97",
-  measurementId: "G-YSVDTJVDSY",
-  databaseURL: "https://instashare-b328c-default-rtdb.asia-southeast1.firebasedatabase.app"
+  measurementId: "G-YSVDTJVDSY"
 };
 
 // Initialize Firebase
