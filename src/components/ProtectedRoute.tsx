@@ -7,7 +7,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   const { user} = useAuth();
   const location = useLocation();
 
-  console.log(user)
+  //console.log(user)
    
   if (!user && !location.pathname.includes("/login")){
     return <Navigate to="/login" replace />;

@@ -6,6 +6,7 @@ import { Users, School, Bus, UserCheck, User, Mail, LogIn } from 'lucide-react';
 import { auth, signInWithGooglePopup } from "../firebase";
 import { sendSignInLinkToEmail } from "firebase/auth";
 import { useAuth } from '../store/useAuth';
+import {jwtDecode} from "jwt-decode";
 
 const userTypeData = {
   admin: { title: 'Administrator', description: 'School administration and management', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800', icon: Users },
@@ -60,6 +61,9 @@ export const Login: React.FC = () => {
       
       if (user) {
         const token = await user.getIdToken(true);
+        console.log("Google Sign-In User:", token);
+        checkTokenIssuer(token);
+
         
         // Save to localStorage
         localStorage.setItem("user", JSON.stringify({
@@ -91,6 +95,22 @@ export const Login: React.FC = () => {
     }
   };
   
+
+
+async function checkTokenIssuer(token: string) {
+  try {
+    const decoded = jwtDecode(token);
+    console.log("Decoded Token:", decoded);
+
+    if (decoded.iss !== `https://securetoken.google.com/instashare-b328c`) {
+      console.error("Invalid Issuer:", decoded.iss);
+    } else {
+      console.log("Issuer is correct");
+    }
+  } catch (error) {
+    console.error("Error decoding token:", error);
+  }
+}
   
   const isDesktop = window.innerWidth >= 768;
   const userTypes = isDesktop ? ['parent', 'admin', 'teacher'] : ['parent', 'teacher', 'attendance-officer', 'school-bus'];
