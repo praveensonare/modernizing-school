@@ -53,6 +53,7 @@ export const Login: React.FC = () => {
     }
   };
   
+  
   const handleLoginGoogle = async (): Promise<void> => {
     try {
       setLoading(true);
@@ -95,22 +96,35 @@ export const Login: React.FC = () => {
     }
   };
   
-
-
-async function checkTokenIssuer(token: string) {
-  try {
-    const decoded = jwtDecode(token);
-    console.log("Decoded Token:", decoded);
-
-    if (decoded.iss !== `https://securetoken.google.com/instashare-b328c`) {
-      console.error("Invalid Issuer:", decoded.iss);
-    } else {
-      console.log("Issuer is correct");
+  async function checkTokenIssuer(token: string) {
+    try {
+      const decoded: any = jwtDecode(token);
+      console.log("Decoded Token:", decoded);
+  
+      // Check Token Issuer
+      if (decoded.iss !== `https://securetoken.google.com/instashare-b328c`) {
+        console.error("Invalid Issuer:", decoded.iss);
+        return; // Invalid token, no need to check expiry
+      } else {
+        console.log("Issuer is correct");
+      }
+  
+      // Check Token Expiry
+      const expiryTime = new Date(decoded.exp * 1000);
+      console.log("Token Expiry Time:", expiryTime);
+  
+      if (expiryTime < new Date()) {
+        console.warn("Token has expired! Logging out...");
+        const auth = useAuth();
+        auth.logout(); // Logout user if token expired
+      }
+    } catch (error) {
+      console.error("Error decoding token:", error);
     }
-  } catch (error) {
-    console.error("Error decoding token:", error);
   }
-}
+  
+
+
   
   const isDesktop = window.innerWidth >= 768;
   const userTypes = isDesktop ? ['parent', 'admin', 'teacher'] : ['parent', 'teacher', 'attendance-officer', 'school-bus'];
